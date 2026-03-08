@@ -2,1117 +2,1129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Admin Panel — Advyka 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>Prototype Challenge — Advyka 2026 | IEDC CEP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<!-- Razorpay loaded dynamically -->
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --red:#e8232a;--orange:#f47920;--yellow:#f9c423;--teal:#00a89d;
   --blue:#1055d4;--purple:#5b3bbd;--pink:#e63a8a;
-  --dark:#08060f;--card:#100d1c;--card2:#130f20;--sidebar:#0c0918;
-  --text:#f0eaf8;--muted:rgba(240,234,248,.5);--border:rgba(255,255,255,.07);
+  --dark:#08060f;--card:#100d1c;--card2:#130f20;
+  --text:#f0eaf8;--muted:rgba(240,234,248,.52);--border:rgba(255,255,255,.07);
   --ff:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
-  --gbtn:linear-gradient(135deg,#e8232a,#f47920,#5b3bbd);
+  --gbtn:linear-gradient(135deg,#e8232a 0%,#f47920 50%,#5b3bbd 100%);
   --gfire:linear-gradient(135deg,#e8232a,#f47920,#f9c423);
+  --gcool:linear-gradient(135deg,#00a89d,#1055d4,#5b3bbd);
+  --gfull:linear-gradient(135deg,#e8232a,#f47920,#e63a8a,#5b3bbd,#1055d4);
 }
-html,body{height:100%}
-body{background:var(--dark);color:var(--text);font-family:var(--fb);overflow:hidden;line-height:1.5}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--text);font-family:var(--fb);overflow-x:hidden;line-height:1.65}
 a{text-decoration:none;color:inherit}
-button{cursor:pointer;font-family:inherit}
-input,select,textarea{font-family:inherit}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+button,input,select,textarea{font-family:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--dark)}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
+::selection{background:rgba(230,58,138,.3);color:#fff}
 
-/* ── LAYOUT ── */
-#app{display:flex;height:100vh;overflow:hidden}
-#sidebar{width:220px;min-width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;z-index:10}
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-#topbar{height:58px;min-height:58px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
-#content{flex:1;overflow-y:auto;padding:28px 28px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ping{0%{transform:scale(1);opacity:.8}80%,100%{transform:scale(2.4);opacity:0}}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes revealup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── SIDEBAR ── */
-.sb-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
-.sb-logo .logo-icon{width:34px;height:34px;border-radius:8px;background:var(--gbtn);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;color:#fff;flex-shrink:0}
-.sb-logo-row{display:flex;align-items:center;gap:9px}
-.sb-logo-text{font-family:var(--ff);font-size:.95rem;font-weight:700;line-height:1.15}
-.sb-logo-sub{font-size:.62rem;color:var(--muted);margin-top:1px}
-.sb-nav{padding:10px 0;flex:1}
-.sb-section{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25);padding:14px 16px 6px}
-.sb-link{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:.83rem;font-weight:500;color:var(--muted);transition:all .18s;border-left:2px solid transparent;cursor:pointer}
-.sb-link:hover{color:var(--text);background:rgba(255,255,255,.04)}
-.sb-link.active{color:var(--text);background:rgba(244,121,32,.08);border-left-color:var(--orange)}
-.sb-link .icon{width:18px;height:18px;flex-shrink:0;opacity:.7}
-.sb-link.active .icon{opacity:1}
-.sb-footer{padding:14px 16px;border-top:1px solid var(--border)}
-.sb-admin{display:flex;align-items:center;gap:9px}
-.sb-avatar{width:30px;height:30px;border-radius:50%;background:var(--gbtn);display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:.7rem;font-weight:800;color:#fff;flex-shrink:0}
-.sb-admin-name{font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-admin-role{font-size:.66rem;color:var(--muted)}
+.f1{animation:float 6s ease-in-out infinite}
+.f2{animation:float 8s ease-in-out infinite;animation-delay:-3s}
+.f3{animation:float 7s ease-in-out infinite;animation-delay:-5s}
+.sp{animation:spin 22s linear infinite}
+.sr{animation:spin 16s linear infinite reverse}
 
-/* ── TOPBAR ── */
-.tb-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:7px 12px;flex:1;max-width:340px}
-.tb-search input{background:none;border:none;outline:none;color:var(--text);font-size:.83rem;width:100%}
-.tb-search input::placeholder{color:var(--muted)}
-.tb-right{display:flex;align-items:center;gap:10px}
-.tb-badge{padding:4px 10px;border-radius:6px;font-size:.72rem;font-weight:700;background:rgba(0,168,157,.12);border:1px solid rgba(0,168,157,.25);color:var(--teal)}
-.tb-btn{padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:600;border:none;display:flex;align-items:center;gap:6px;transition:all .18s}
-.tb-btn.outline{background:transparent;border:1px solid var(--border);color:var(--muted)}
-.tb-btn.outline:hover{border-color:var(--orange);color:var(--orange)}
-.tb-btn.primary{background:var(--gbtn);color:#fff}
-.tb-btn svg{width:14px;height:14px}
+.gt{background:var(--gfull);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ft{background:var(--gfire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ct{background:var(--gcool);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
-/* ── VIEWS ── */
-.view{display:none}
-.view.active{display:block}
+.mesh{background-color:var(--dark);background-image:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(232,35,42,.13) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 85% 10%,rgba(91,59,189,.15) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 50% 88%,rgba(0,168,157,.11) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 78% 55%,rgba(230,58,138,.09) 0%,transparent 60%)}
+.gbg{background-image:linear-gradient(rgba(244,121,32,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(91,59,189,.04) 1px,transparent 1px);background-size:58px 58px}
 
-/* ── STAT CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;position:relative;overflow:hidden}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.stat-card:nth-child(1)::before{background:linear-gradient(to right,var(--red),var(--orange))}
-.stat-card:nth-child(2)::before{background:linear-gradient(to right,var(--teal),var(--blue))}
-.stat-card:nth-child(3)::before{background:linear-gradient(to right,var(--purple),var(--pink))}
-.stat-card:nth-child(4)::before{background:linear-gradient(to right,var(--orange),var(--yellow))}
-.stat-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:600}
-.stat-val{font-family:var(--ff);font-size:1.9rem;font-weight:800;line-height:1}
-.stat-sub{font-size:.72rem;color:var(--muted);margin-top:5px}
-.stat-card:nth-child(1) .stat-val{background:linear-gradient(to right,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-card:nth-child(2) .stat-val{color:var(--teal)}
-.stat-card:nth-child(3) .stat-val{color:var(--purple)}
-.stat-card:nth-child(4) .stat-val{color:var(--yellow)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:12px;font-family:var(--ff);font-weight:700;font-size:.88rem;cursor:pointer;border:none;transition:all .25s;letter-spacing:.02em}
+.btn:hover{transform:translateY(-2px)}
+.btn-p{background:var(--gbtn);color:#fff;box-shadow:0 8px 28px rgba(232,35,42,.22)}
+.btn-p:hover{box-shadow:0 14px 40px rgba(232,35,42,.38)}
+.btn-o{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn-o:hover{border-color:var(--orange);color:var(--orange)}
+.btnlg{padding:15px 38px;font-size:1rem;border-radius:14px}
+.btn svg{width:18px;height:18px}
 
-/* ── TABLE ── */
-.table-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
-.table-title{font-family:var(--ff);font-size:.95rem;font-weight:700}
-.table-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.filter-select{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-size:.77rem;outline:none;cursor:pointer}
-.filter-select option{background:#1a1428}
-.filter-select:focus{border-color:rgba(244,121,32,.4)}
-.bulk-actions{display:none;align-items:center;gap:8px;padding:10px 20px;background:rgba(244,121,32,.07);border-bottom:1px solid rgba(244,121,32,.15)}
-.bulk-actions.show{display:flex}
-.bulk-count{font-size:.8rem;font-weight:600;color:var(--orange)}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:.82rem}
-thead th{padding:11px 14px;text-align:left;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:rgba(0,0,0,.2);white-space:nowrap;border-bottom:1px solid var(--border)}
-thead th:first-child{padding-left:20px}
-tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
-tbody tr:hover{background:rgba(255,255,255,.025)}
-tbody tr:last-child{border-bottom:none}
-tbody td{padding:11px 14px;vertical-align:middle;white-space:nowrap}
-tbody td:first-child{padding-left:20px}
-.cb{width:15px;height:15px;accent-color:var(--orange);cursor:pointer}
-.att-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:5px;font-size:.7rem;font-weight:700}
-.att-badge.present{background:rgba(0,168,157,.12);color:var(--teal);border:1px solid rgba(0,168,157,.2)}
-.att-badge.absent{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
-.status-badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.68rem;font-weight:700;text-transform:uppercase}
-.status-badge.confirmed{background:rgba(0,168,157,.12);color:var(--teal)}
-.status-badge.cancelled{background:rgba(232,35,42,.12);color:var(--red)}
-.status-badge.waitlist{background:rgba(244,121,32,.12);color:var(--orange)}
-.action-btn{padding:4px 10px;border-radius:6px;font-size:.72rem;font-weight:600;border:none;transition:all .15s}
-.action-btn.edit{background:rgba(91,59,189,.15);color:#a78bfa;border:1px solid rgba(91,59,189,.2)}
-.action-btn.edit:hover{background:rgba(91,59,189,.28)}
-.action-btn.del{background:rgba(232,35,42,.12);color:#ff7a7d;border:1px solid rgba(232,35,42,.2)}
-.action-btn.del:hover{background:rgba(232,35,42,.25)}
-.action-btn.att{background:rgba(0,168,157,.1);color:var(--teal);border:1px solid rgba(0,168,157,.18)}
-.action-btn.att:hover{background:rgba(0,168,157,.22)}
-.table-footer{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-top:1px solid var(--border);flex-wrap:wrap;gap:10px}
-.page-info{font-size:.77rem;color:var(--muted)}
-.page-btns{display:flex;gap:6px}
-.page-btn{padding:5px 12px;border-radius:7px;font-size:.77rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s}
-.page-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
-.page-btn:disabled{opacity:.3;cursor:default}
-.page-btn.active{background:var(--gbtn);border-color:transparent;color:#fff}
-.no-data{text-align:center;padding:48px 20px;color:var(--muted);font-size:.88rem}
-.no-data .nd-icon{font-size:2.5rem;margin-bottom:10px}
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:16px 0;transition:all .3s}
+#nav.sc{padding:9px 0;background:rgba(8,6,15,.93);backdrop-filter:blur(22px);border-bottom:1px solid var(--border)}
+.nv{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:10px}
+.li{width:36px;height:36px;border-radius:9px;background:var(--gbtn);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;color:#fff;flex-shrink:0}
+.ls .sub{font-size:.62rem;font-weight:400;color:var(--muted);display:block;letter-spacing:.05em;margin-top:-2px}
+.nl{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:4px}
+.nl a{padding:7px 15px;border-radius:9px;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.55);transition:all .2s}
+.nl a:hover{background:rgba(255,255,255,.07);color:#fff}
+.hm{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hm span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.mm{display:none;position:fixed;inset:0;background:rgba(8,6,15,.97);backdrop-filter:blur(20px);z-index:998;padding:90px 28px 40px;flex-direction:column;gap:8px}
+.mm.open{display:flex}
+.mm a{font-family:var(--ff);font-size:1.3rem;font-weight:700;padding:14px 0;border-bottom:1px solid var(--border)}
+.mmx{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--text);font-size:1.8rem;cursor:pointer;font-family:var(--ff)}
+@media(max-width:768px){.nl{display:none}.hm{display:flex}}
 
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{display:flex}
-.modal{background:var(--card2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;position:relative}
-.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gbtn);border-radius:20px 20px 0 0}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
-.modal-title{font-family:var(--ff);font-size:1rem;font-weight:700}
-.modal-close{background:rgba(255,255,255,.06);border:none;width:28px;height:28px;border-radius:7px;color:var(--muted);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.modal-close:hover{background:rgba(232,35,42,.15);color:var(--red)}
-.modal-body{padding:22px 24px}
-.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-row.full{grid-template-columns:1fr}
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:80px;position:relative;overflow:hidden}
+.hbg{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.16}
+.o1{width:500px;height:500px;background:var(--red);top:-80px;left:-120px}
+.o2{width:580px;height:580px;background:var(--purple);top:15%;right:-160px}
+.o3{width:350px;height:350px;background:var(--teal);bottom:-60px;left:25%}
+.o4{width:260px;height:260px;background:var(--pink);bottom:8%;right:8%}
+.hggrid{position:absolute;inset:0;background-image:linear-gradient(rgba(244,121,32,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(91,59,189,.032) 1px,transparent 1px);background-size:55px 55px}
+.ring{position:absolute;border-radius:50%;border:1px dashed rgba(255,255,255,.05);top:50%;left:50%;transform:translate(-50%,-50%)}
+.r1{width:750px;height:750px}.r2{width:520px;height:520px}
+.hin{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:50px;background:rgba(232,35,42,.1);border:1px solid rgba(232,35,42,.3);font-size:.73rem;font-weight:600;color:#ff6e71;margin-bottom:20px;letter-spacing:.04em}
+.bdot{width:7px;height:7px;border-radius:50%;background:var(--red);position:relative;flex-shrink:0}
+.bdot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--red);animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite}
+.ht{font-family:var(--ff);font-size:clamp(3rem,5.8vw,5.5rem);font-weight:800;line-height:1.04;letter-spacing:-.025em;margin-bottom:18px}
+.ey{display:block;font-family:var(--fb);font-size:clamp(.85rem,1.7vw,1rem);font-weight:300;color:var(--muted);letter-spacing:.22em;margin-bottom:8px;text-transform:uppercase}
+.hs2{color:var(--muted);font-size:1rem;line-height:1.78;margin-bottom:32px;max-width:460px}
+.hbtns{display:flex;gap:12px;flex-wrap:wrap}
+.hst{display:flex;gap:28px;margin-top:44px;padding-top:32px;border-top:1px solid var(--border);flex-wrap:wrap}
+.hst .n{font-family:var(--ff);font-size:1.9rem;font-weight:800;background:var(--gfire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hst .l{font-size:.7rem;color:var(--muted);margin-top:1px;text-transform:uppercase;letter-spacing:.09em}
+.hvis{position:relative;height:440px;display:flex;align-items:center;justify-content:center}
+.hvm{width:265px;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:24px;position:absolute;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.55)}
+.hvm::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gbtn)}
+.hvt{font-size:.65rem;text-transform:uppercase;letter-spacing:.13em;color:var(--orange);font-weight:700;margin-bottom:10px}
+.hvh{font-family:var(--ff);font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.hvs{font-size:.79rem;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:4px 9px;border-radius:7px;font-size:.67rem;font-weight:600;border:1px solid}
+.fc{position:absolute;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 15px;box-shadow:0 20px 48px rgba(0,0,0,.4)}
+.fc .fn{font-family:var(--ff);font-size:1.2rem;font-weight:800}
+.fc .fl{font-size:.7rem;color:var(--muted);margin-top:2px}
+.fc1{top:20px;right:10px;border-top:2px solid var(--orange)}
+.fc2{bottom:50px;left:5px;border-top:2px solid var(--teal)}
+.fc3{top:46%;right:-12px;transform:translateY(-50%);border-top:2px solid var(--pink)}
+@media(max-width:900px){.hin{grid-template-columns:1fr}.hvis{display:none}}
+
+/* MARQUEE */
+.mq{padding:18px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;position:relative}
+.mq::before,.mq::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
+.mq::before{left:0;background:linear-gradient(to right,var(--dark),transparent)}
+.mq::after{right:0;background:linear-gradient(to left,var(--dark),transparent)}
+.mqt{display:flex;width:max-content;animation:marquee 22s linear infinite}
+.mqt:hover{animation-play-state:paused}
+.mqi{display:flex;align-items:center;gap:12px;padding:0 26px;font-family:var(--ff);font-size:.8rem;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.09em;white-space:nowrap}
+.mqd{width:5px;height:5px;border-radius:50%;background:var(--orange);flex-shrink:0}
+
+/* SECTIONS */
+section{padding:96px 0}
+.con{max-width:1200px;margin:0 auto;padding:0 24px}
+.slbl{display:inline-block;padding:5px 15px;border-radius:50px;background:rgba(244,121,32,.1);border:1px solid rgba(244,121,32,.28);font-size:.68rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.sh{font-family:var(--ff);font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;line-height:1.17;color:var(--text)}
+.ss{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.75;max-width:540px}
+.shd{margin-bottom:52px}
+.shd.c{text-align:center}.shd.c .ss{margin-left:auto;margin-right:auto}
+
+/* ABOUT */
+#about .ag{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.abulls{list-style:none;margin:22px 0;display:flex;flex-direction:column;gap:10px}
+.abulls li{display:flex;align-items:flex-start;gap:11px;font-size:.9rem;color:var(--muted);line-height:1.6}
+.abi{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.88rem;margin-top:1px}
+.avis{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.avc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;position:relative;overflow:hidden}
+.avc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.avc:nth-child(1)::before{background:linear-gradient(to right,var(--red),var(--orange))}
+.avc:nth-child(2)::before{background:linear-gradient(to right,var(--purple),var(--pink))}
+.avc:nth-child(3)::before{background:linear-gradient(to right,var(--teal),var(--blue))}
+.avc:nth-child(4)::before{background:linear-gradient(to right,var(--orange),var(--yellow))}
+.avc .an{font-family:var(--ff);font-size:1.75rem;font-weight:800;margin-bottom:4px}
+.avc .al{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:768px){#about .ag,.avis{grid-template-columns:1fr}}
+
+/* TIMELINE */
+#timeline .tlw{position:relative;max-width:680px;margin:0 auto}
+.tll{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--orange),var(--purple),transparent);transform:translateX(-50%)}
+.tli{display:flex;gap:30px;margin-bottom:44px;position:relative;align-items:flex-start}
+.tli:nth-child(odd){flex-direction:row}
+.tli:nth-child(even){flex-direction:row-reverse}
+.tlc{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;position:relative}
+.tlc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0}
+.tli:nth-child(1) .tlc::before{background:var(--gfire)}
+.tli:nth-child(2) .tlc::before{background:var(--gcool)}
+.tli:nth-child(3) .tlc::before{background:linear-gradient(to right,var(--pink),var(--purple))}
+.tli:nth-child(4) .tlc::before{background:linear-gradient(to right,var(--orange),var(--yellow))}
+.tld{width:13px;height:13px;border-radius:50%;background:var(--orange);border:3px solid var(--dark);position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:2}
+.tldt{font-family:var(--ff);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:5px}
+.tltt{font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:3px}
+.tldc{font-size:.8rem;color:var(--muted);line-height:1.6}
+.tlsp{flex:1}
+@media(max-width:600px){.tll{left:14px}.tli,.tli:nth-child(even){flex-direction:column;padding-left:36px}.tlsp{display:none}.tld{left:14px;top:18px}}
+
+/* PRIZES */
+#prizes .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:860px;margin:0 auto}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:34px 26px;text-align:center;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.pc:hover{transform:translateY(-6px)}
+.pc.gold{border-color:rgba(249,196,35,.25);box-shadow:0 0 40px rgba(249,196,35,.07)}
+.pc.gold:hover{box-shadow:0 20px 60px rgba(249,196,35,.14)}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pc.gold::before{background:var(--gfire)}
+.pc.silver::before{background:linear-gradient(to right,#a8b2c0,#d0d8e8)}
+.pc.bronze::before{background:linear-gradient(to right,#cd7f32,#e8a070)}
+.pmed{font-size:2.6rem;margin-bottom:12px}
+.prk{font-family:var(--ff);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin-bottom:7px}
+.pamt{font-family:var(--ff);font-size:2.1rem;font-weight:800;margin-bottom:5px}
+.pamt.gc{background:var(--gfire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.plbl{font-size:.8rem;color:var(--muted)}
+@media(max-width:560px){#prizes .pg{grid-template-columns:1fr;max-width:300px}}
+
+/* RULES */
+#rules .rg{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start;transition:border-color .3s}
+.rc:hover{border-color:rgba(244,121,32,.22)}
+.rn{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:.88rem;font-weight:800;flex-shrink:0;background:rgba(244,121,32,.11);color:var(--orange);border:1px solid rgba(244,121,32,.2)}
+.rb h4{font-family:var(--ff);font-size:.92rem;font-weight:700;margin-bottom:4px}
+.rb p{font-size:.8rem;color:var(--muted);line-height:1.65}
+@media(max-width:580px){#rules .rg{grid-template-columns:1fr}}
+
+/* CRITERIA */
+#criteria{background:var(--card2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#criteria .cg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cc{background:var(--dark);border:1px solid var(--border);border-radius:18px;padding:24px 20px;text-align:center;position:relative}
+.ci2{font-size:1.9rem;margin-bottom:12px}
+.cp{font-family:var(--ff);font-size:1.55rem;font-weight:800;margin-bottom:3px}
+.ct2{font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:5px}
+.cd{font-size:.78rem;color:var(--muted);line-height:1.65}
+.cc:nth-child(1) .cp{color:var(--orange)}.cc:nth-child(2) .cp{color:var(--teal)}
+.cc:nth-child(3) .cp{color:var(--pink)}.cc:nth-child(4) .cp{color:var(--purple)}
+.cc:nth-child(5) .cp{color:var(--yellow)}.cc:nth-child(6) .cp{color:var(--blue)}
+@media(max-width:600px){#criteria .cg{grid-template-columns:1fr 1fr}}
+
+/* REGISTER */
+#register{position:relative;overflow:hidden}
+.rc2{max-width:740px;margin:0 auto;padding:0 24px}
+.rcard{background:var(--card);border:1px solid var(--border);border-radius:26px;overflow:hidden;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gbtn);z-index:2}
+.rh{padding:32px 38px 24px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.rh::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(232,35,42,.06),transparent 70%);pointer-events:none}
+.rhtag{font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--orange);font-weight:700;margin-bottom:7px}
+.rhtt{font-family:var(--ff);font-size:1.6rem;font-weight:800;margin-bottom:3px}
+.rhs{font-size:.83rem;color:var(--muted)}
+.feebadge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:50px;background:rgba(244,121,32,.12);border:1px solid rgba(244,121,32,.3);font-family:var(--ff);font-size:.83rem;font-weight:700;color:var(--orange);margin-top:12px}
+
+/* Step bar */
+.sbar{display:flex;align-items:center;padding:20px 38px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.18)}
+.sp2{display:flex;align-items:center;flex:1}
+.sn{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:.76rem;font-weight:700;flex-shrink:0;transition:all .3s;border:2px solid rgba(255,255,255,.12);color:var(--muted)}
+.sp2.active .sn{background:var(--gbtn);border-color:transparent;color:#fff;box-shadow:0 4px 16px rgba(232,35,42,.28)}
+.sp2.done .sn{background:rgba(0,168,157,.18);border-color:var(--teal);color:var(--teal)}
+.snl{font-size:.7rem;font-weight:600;color:var(--muted);margin-left:7px;white-space:nowrap;transition:color .3s}
+.sp2.active .snl{color:var(--text)}
+.sl{flex:1;height:1px;background:var(--border);margin:0 6px;min-width:16px}
+
+/* Form */
+.fb2{padding:32px 38px}
+.fstep{display:none}
+.fstep.active{display:block}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.frow.full{grid-template-columns:1fr}
 .fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:.73rem;font-weight:600;color:rgba(240,234,248,.65);letter-spacing:.04em}
-.fg input,.fg select,.fg textarea{background:rgba(0,0,0,.35);border:1.5px solid rgba(255,255,255,.08);border-radius:9px;padding:9px 12px;color:var(--text);font-size:.85rem;outline:none;transition:border-color .2s;width:100%}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(244,121,32,.45)}
+.fg label{font-size:.76rem;font-weight:600;color:rgba(240,234,248,.68);letter-spacing:.04em}
+.fg label .req{color:var(--red);margin-left:2px}
+.fg input,.fg select,.fg textarea{background:rgba(0,0,0,.33);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:11px 14px;color:var(--text);font-size:.88rem;outline:none;transition:border-color .22s,box-shadow .22s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(244,121,32,.48);box-shadow:0 0 0 3px rgba(244,121,32,.1)}
 .fg select option{background:#1a1428}
-.fg textarea{resize:vertical;min-height:70px}
-.section-divider{font-family:var(--ff);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(244,121,32,.15)}
+.fg textarea{resize:vertical;min-height:76px}
+.fg input.err,.fg select.err,.fg textarea.err{border-color:rgba(232,35,42,.48)!important}
+.errmsg{font-size:.7rem;color:var(--red);margin-top:1px;display:none}
+.errmsg.show{display:block}
+.tmr{background:rgba(0,0,0,.23);border:1px solid rgba(255,255,255,.06);border-radius:11px;padding:14px;margin-bottom:11px;position:relative}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.mlbl{font-family:var(--ff);font-size:.78rem;font-weight:700;color:var(--orange)}
+.mrm{background:rgba(232,35,42,.1);border:1px solid rgba(232,35,42,.22);border-radius:7px;padding:3px 9px;font-size:.7rem;color:var(--red);cursor:pointer;transition:all .2s}
+.mrm:hover{background:rgba(232,35,42,.22)}
+.addm{display:flex;align-items:center;gap:8px;background:rgba(244,121,32,.07);border:1.5px dashed rgba(244,121,32,.28);border-radius:10px;padding:11px;cursor:pointer;font-size:.83rem;font-weight:600;color:var(--orange);transition:all .2s;width:100%;justify-content:center;margin-top:2px}
+.addm:hover{background:rgba(244,121,32,.13)}
+.pi{background:rgba(0,0,0,.28);border:1px solid rgba(244,121,32,.2);border-radius:15px;padding:22px;margin-bottom:22px}
+.pav{font-family:var(--ff);font-size:2rem;font-weight:800;color:var(--orange);margin-bottom:3px}
+.pac{font-size:.78rem;color:var(--muted)}
+.pnote{font-size:.78rem;color:var(--muted);line-height:1.6;margin-top:7px}
+.pmm{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pm{padding:5px 12px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.55)}
+.fnav{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding-top:22px;border-top:1px solid var(--border)}
+.si{font-size:.76rem;color:var(--muted)}
 
-/* ── DETAIL MODAL ── */
-.detail-section{margin-bottom:18px}
-.detail-section h4{font-family:var(--ff);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--orange);margin-bottom:10px}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.detail-item{background:rgba(0,0,0,.25);border-radius:8px;padding:9px 12px}
-.detail-item .di-label{font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.detail-item .di-val{font-size:.83rem;font-weight:500;word-break:break-all}
-.member-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(91,59,189,.1);border:1px solid rgba(91,59,189,.2);border-radius:8px;padding:5px 10px;margin:3px;font-size:.78rem}
+/* Success */
+.succ{padding:44px 38px;text-align:center;display:none}
+.succ.show{display:block}
+.sico{width:70px;height:70px;border-radius:50%;background:rgba(0,168,157,.13);border:2px solid rgba(0,168,157,.28);display:flex;align-items:center;justify-content:center;font-size:1.9rem;margin:0 auto 18px}
+.stit{font-family:var(--ff);font-size:1.65rem;font-weight:800;margin-bottom:8px}
+.ssub{color:var(--muted);font-size:.9rem;line-height:1.7;max-width:380px;margin:0 auto 24px}
+.cid{background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:9px 16px;font-family:monospace;font-size:.8rem;color:var(--orange);display:inline-block;margin-bottom:22px}
+@media(max-width:600px){.fb2,.rh{padding:22px 18px}.sbar{padding:16px 18px}.snl{display:none}.frow{grid-template-columns:1fr}.sn{width:24px;height:24px;font-size:.68rem}}
 
-/* ── LOGIN ── */
-#loginScreen{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:2000;background-image:radial-gradient(ellipse 50% 50% at 30% 30%,rgba(232,35,42,.08),transparent),radial-gradient(ellipse 50% 50% at 70% 70%,rgba(91,59,189,.1),transparent)}
-.login-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:36px 32px;width:100%;max-width:380px;position:relative;overflow:hidden}
-.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gbtn)}
-.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;justify-content:center}
-.login-icon{width:40px;height:40px;border-radius:10px;background:var(--gbtn);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;color:#fff}
-.login-title{font-family:var(--ff);font-size:1.25rem;font-weight:800}
-.login-sub{text-align:center;font-size:.8rem;color:var(--muted);margin-bottom:24px}
-.login-fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.login-fg label{font-size:.75rem;font-weight:600;color:rgba(240,234,248,.65)}
-.login-fg input{background:rgba(0,0,0,.35);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:11px 14px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s;width:100%}
-.login-fg input:focus{border-color:rgba(244,121,32,.45)}
-.login-btn{width:100%;padding:12px;border-radius:10px;background:var(--gbtn);color:#fff;font-family:var(--ff);font-size:.92rem;font-weight:700;border:none;margin-top:6px;transition:all .2s}
-.login-btn:hover{opacity:.9;transform:translateY(-1px)}
-.login-err{font-size:.78rem;color:var(--red);text-align:center;margin-top:8px;display:none}
-.login-err.show{display:block}
+/* TEAM */
+#team{background:var(--card2);border-top:1px solid var(--border)}
+#team .tg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tc{background:var(--dark);border:1px solid var(--border);border-radius:18px;overflow:hidden;position:relative;transition:all .3s}
+.tc:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.11)}
+.tcimg{aspect-ratio:4/5;overflow:hidden;background:#0d0a1a;position:relative}
+.tcimg img{width:100%;height:100%;object-fit:cover;transition:transform .5s;filter:grayscale(15%)}
+.tc:hover .tcimg img{transform:scale(1.05)}
+.tco{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,15,.85) 0%,transparent 50%)}
+.tcb{padding:13px 15px}
+.tcn{font-family:var(--ff);font-size:.9rem;font-weight:700;margin-bottom:2px}
+.tcr{font-size:.73rem;font-weight:600}
+@media(max-width:860px){#team .tg{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:580px){#team .tg{grid-template-columns:repeat(2,1fr)}}
 
-/* ── TOAST ── */
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast-item{padding:11px 18px;border-radius:10px;font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:8px;pointer-events:auto;animation:slideIn .25s ease;border:1px solid var(--border)}
-.toast-item.success{background:#0d2e24;border-color:rgba(0,168,157,.3);color:var(--teal)}
-.toast-item.error{background:#2e0d0f;border-color:rgba(232,35,42,.3);color:#ff7a7d}
-.toast-item.info{background:#1a1428;border-color:rgba(91,59,189,.3);color:#a78bfa}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+/* CONTACT */
+#contact .cg2{display:grid;grid-template-columns:1fr 1.4fr;gap:52px;align-items:start}
+.cii{display:flex;align-items:flex-start;gap:13px;margin-bottom:16px}
+.cico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.cib strong{display:block;font-family:var(--ff);font-size:.83rem;font-weight:700;margin-bottom:1px}
+.cib span{font-size:.8rem;color:var(--muted)}
+.cfw{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:30px;position:relative}
+.cfw::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gbtn);border-radius:22px 22px 0 0}
+.cfr{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px}
+.cfr1{margin-bottom:14px}
+.cfsuc{display:none;text-align:center;padding:20px 0}
+.cfsuc.show{display:block}
+@media(max-width:720px){#contact .cg2{grid-template-columns:1fr}.cfr{grid-template-columns:1fr}}
 
-/* ── CHARTS ── */
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
-.chart-title{font-family:var(--ff);font-size:.85rem;font-weight:700;margin-bottom:16px;color:var(--text)}
-.bar-chart{display:flex;flex-direction:column;gap:8px}
-.bar-row{display:flex;align-items:center;gap:10px}
-.bar-label{font-size:.72rem;color:var(--muted);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar-track{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
-.bar-count{font-size:.72rem;font-weight:700;color:var(--text);width:26px;text-align:right;flex-shrink:0}
-.recent-list{display:flex;flex-direction:column;gap:8px}
-.recent-item{display:flex;align-items:center;gap:12px;padding:9px 12px;background:rgba(0,0,0,.2);border-radius:10px}
-.ri-avatar{width:30px;height:30px;border-radius:8px;background:var(--gbtn);display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:.65rem;font-weight:800;color:#fff;flex-shrink:0}
-.ri-name{font-size:.82rem;font-weight:600;margin-bottom:1px}
-.ri-sub{font-size:.7rem;color:var(--muted)}
-.ri-time{font-size:.68rem;color:var(--muted);margin-left:auto;white-space:nowrap}
-.att-toggle{width:38px;height:22px;border-radius:11px;border:none;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
-.att-toggle::after{content:'';position:absolute;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s}
-.att-toggle.off{background:rgba(255,255,255,.1)}
-.att-toggle.off::after{left:3px}
-.att-toggle.on{background:var(--teal)}
-.att-toggle.on::after{left:19px}
+/* FOOTER */
+footer{border-top:1px solid var(--border);background:var(--card2);padding:56px 0 28px}
+.ftl{height:3px;background:linear-gradient(to right,var(--red),var(--orange),var(--pink),var(--purple),var(--teal))}
+.fin{max-width:1200px;margin:0 auto;padding:0 24px}
+.fg2{display:grid;grid-template-columns:2fr 1fr 1fr;gap:44px;padding-bottom:36px;border-bottom:1px solid var(--border)}
+.fg2 p{font-size:.83rem;color:var(--muted);line-height:1.75;margin-top:9px;max-width:290px}
+.fcol h4{font-family:var(--ff);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:14px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.fcol a{font-size:.83rem;color:var(--muted);transition:color .2s}
+.fcol a:hover{color:var(--orange)}
+.fbot{display:flex;align-items:center;justify-content:space-between;padding-top:22px;flex-wrap:wrap;gap:12px}
+.fbot p{font-size:.76rem;color:rgba(255,255,255,.22)}
+.sl2{display:flex;gap:9px}
+.sl2 a{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .2s}
+.sl2 a:hover{background:rgba(244,121,32,.14);border-color:rgba(244,121,32,.28)}
+@media(max-width:580px){.fg2{grid-template-columns:1fr}}
 
-/* confirm modal */
-.confirm-modal{max-width:400px}
-.confirm-icon{width:52px;height:52px;border-radius:50%;background:rgba(232,35,42,.12);border:1px solid rgba(232,35,42,.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 14px}
-.confirm-title{font-family:var(--ff);font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:6px}
-.confirm-sub{font-size:.82rem;color:var(--muted);text-align:center;line-height:1.6}
-.btn-danger{background:rgba(232,35,42,.15);border:1px solid rgba(232,35,42,.25);color:#ff7a7d;padding:8px 20px;border-radius:9px;font-size:.83rem;font-weight:700;transition:all .2s}
-.btn-danger:hover{background:rgba(232,35,42,.28)}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 20px;border-radius:9px;font-size:.83rem;font-weight:700;transition:all .2s}
-.btn-ghost:hover{border-color:var(--text);color:var(--text)}
-.btn-save{background:var(--gbtn);border:none;color:#fff;padding:8px 22px;border-radius:9px;font-size:.83rem;font-weight:700;transition:opacity .2s}
-.btn-save:hover{opacity:.88}
+/* SCROLL REVEAL */
+.sv{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease}
+.sv.vis{opacity:1;transform:translateY(0)}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — Tablet (max 900px)
+══════════════════════════════════════════ */
+@media(max-width:900px){
+  section{padding:72px 0}
+  .hin{grid-template-columns:1fr}
+  .hvis{display:none}
+  #about .ag{grid-template-columns:1fr}
+  .avis{grid-template-columns:1fr 1fr}
+  #contact .cg2{grid-template-columns:1fr}
+  .fg2{grid-template-columns:1fr 1fr}
+  #team .tg{grid-template-columns:repeat(3,1fr)}
+  #prizes .pg{gap:14px}
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — Mobile (max 640px)
+══════════════════════════════════════════ */
+@media(max-width:640px){
+  /* global */
+  section{padding:56px 0}
+  .con{padding:0 16px}
+  .shd{margin-bottom:36px}
+  .sh{font-size:1.75rem}
+  .ss{font-size:.88rem}
+
+  /* nav */
+  .nl{display:none}
+  .hm{display:flex}
+  #nav{padding:12px 0}
+  #nav.sc{padding:8px 0}
+  .nv{padding:0 16px}
+
+  /* hero */
+  #hero{padding-top:72px;min-height:auto;padding-bottom:56px}
+  .hin{padding:0 16px;gap:32px}
+  .ht{font-size:clamp(2.4rem,10vw,3.2rem)}
+  .ey{font-size:.75rem;letter-spacing:.15em}
+  .hs2{font-size:.9rem}
+  .hbtns{flex-direction:column;gap:10px}
+  .hbtns .btn{width:100%;justify-content:center}
+  .hst{gap:18px}
+  .hst .n{font-size:1.5rem}
+  .hst .l{font-size:.66rem}
+  .badge{font-size:.68rem;padding:6px 12px}
+
+  /* marquee */
+  .mqi{padding:0 18px;font-size:.72rem}
+
+  /* about */
+  #about .ag{gap:36px}
+  .avis{grid-template-columns:1fr 1fr;gap:10px}
+  .avc .an{font-size:1.4rem}
+  .abulls li{font-size:.85rem}
+
+  /* timeline */
+  .tll{left:14px}
+  .tli,.tli:nth-child(even){flex-direction:column;padding-left:36px;margin-bottom:28px}
+  .tlsp{display:none}
+  .tld{left:14px;top:18px}
+  .tlc{padding:14px 16px}
+  .tldt{font-size:.66rem}
+  .tltt{font-size:.9rem}
+  .tldc{font-size:.77rem}
+
+  /* prizes */
+  #prizes .pg{grid-template-columns:1fr;max-width:320px;gap:12px}
+  .pc.gold{transform:none!important}
+  .pamt{font-size:1.7rem}
+
+  /* rules */
+  #rules .rg{grid-template-columns:1fr;gap:12px}
+  .rc{padding:16px 18px}
+  .rb h4{font-size:.88rem}
+  .rb p{font-size:.78rem}
+
+  /* criteria */
+  #criteria .cg{grid-template-columns:1fr 1fr;gap:12px}
+  .cc{padding:18px 14px}
+  .ci2{font-size:1.5rem}
+  .cp{font-size:1.25rem}
+  .ct2{font-size:.85rem}
+  .cd{font-size:.73rem}
+
+  /* register form */
+  .rc2{padding:0 16px}
+  .rh{padding:22px 18px}
+  .rhtt{font-size:1.3rem}
+  .feebadge{font-size:.77rem;padding:5px 12px}
+  .sbar{padding:14px 16px;gap:0}
+  .snl{display:none}
+  .sn{width:24px;height:24px;font-size:.68rem}
+  .sl{margin:0 4px;min-width:10px}
+  .fb2{padding:22px 16px}
+  .frow{grid-template-columns:1fr;gap:12px;margin-bottom:12px}
+  .fg input,.fg select,.fg textarea{font-size:.85rem;padding:10px 12px}
+  .fg label{font-size:.73rem}
+  .fnav{flex-direction:column;gap:10px;align-items:stretch}
+  .fnav .btn{width:100%;justify-content:center}
+  .fnav .si{text-align:center;order:-1}
+  .pi{padding:18px 16px}
+  .pav{font-size:1.6rem}
+  .pmm{gap:6px}
+  .pm{font-size:.68rem;padding:4px 10px}
+  .succ{padding:32px 18px}
+  .stit{font-size:1.3rem}
+  .cid{font-size:.74rem}
+
+  /* team */
+  #team .tg{grid-template-columns:repeat(2,1fr);gap:10px}
+  .tcb{padding:10px 12px}
+  .tcn{font-size:.82rem}
+  .tcr{font-size:.68rem}
+
+  /* contact */
+  .cfr{grid-template-columns:1fr}
+  .cfw{padding:22px 18px}
+  .cii{gap:10px}
+  .cico{width:32px;height:32px;font-size:.85rem}
+  .cib strong{font-size:.8rem}
+  .cib span{font-size:.76rem}
+
+  /* footer */
+  .fg2{grid-template-columns:1fr;gap:28px}
+  .fbot{flex-direction:column;align-items:flex-start;gap:14px}
+  footer{padding:40px 0 24px}
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — Small phones (max 380px)
+══════════════════════════════════════════ */
+@media(max-width:380px){
+  .ht{font-size:2.1rem}
+  .avis{grid-template-columns:1fr}
+  #criteria .cg{grid-template-columns:1fr}
+  #team .tg{grid-template-columns:1fr 1fr}
+  .hst{gap:14px}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="login-icon">ADV</div>
+<nav id="nav">
+  <div class="nv">
+    <a href="#" class="logo">
+      <div class="li">ADV</div>
+      <div class="ls"><span>Iedc <span class="ft">'26</span></span><span class="sub">IEDC CEP · Prototype2.0</span></div>
+    </a>
+    <div class="nl">
+      <a href="#about">About</a><a href="#timeline">Schedule</a>
+      <a href="#prizes">Prizes</a><a href="#rules">Rules</a>
+      <a href="#team">Team</a><a href="#contact">Contact</a>
+    </div>
+    <a href="#register" class="btn btn-p" style="padding:9px 20px;font-size:.8rem">Register Now</a>
+    <button class="hm" onclick="tmenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mm" id="mm">
+  <button class="mmx" onclick="tmenu()">✕</button>
+  <a href="#about" onclick="tmenu()">About</a>
+  <a href="#timeline" onclick="tmenu()">Schedule</a>
+  <a href="#prizes" onclick="tmenu()">Prizes</a>
+  <a href="#rules" onclick="tmenu()">Rules</a>
+  <a href="#team" onclick="tmenu()">Team</a>
+  <a href="#contact" onclick="tmenu()">Contact</a>
+  <a href="#register" onclick="tmenu()" class="btn btn-p btnlg" style="margin-top:14px;justify-content:center">Register Now →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hbg">
+    <div class="orb o1 f1"></div><div class="orb o2 f2"></div>
+    <div class="orb o3 f3"></div><div class="orb o4 f1"></div>
+    <div class="hggrid"></div>
+    <div class="ring r1 sp"></div><div class="ring r2 sr"></div>
+  </div>
+  <div class="hin">
+    <div>
+      <div class="badge"><span class="bdot"></span>Registrations Open · Advyka 2026</div>
+      <h1 class="ht">
+        <span class="ey">IEDC CEP Presents</span>
+        <span class="gt">Proto</span>type<br>Challenge
+      </h1>
+      <p class="hs2">Build something that matters. Present your working prototype to industry experts, compete for ₹25,000 in prizes, and turn your idea into a real innovation at Advyka 2026.</p>
+      <div class="hbtns">
+        <a href="#register" class="btn btn-p btnlg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+          Register Your Team
+        </a>
+        <a href="#about" class="btn btn-o btnlg">Learn More</a>
+      </div>
+      <div class="hst">
+        <div><div class="n">₹25K</div><div class="l">Prize Pool</div></div>
+        <div><div class="n">200+</div><div class="l">Teams Expected</div></div>
+        <div><div class="n">1 Day</div><div class="l">Of Innovation</div></div>
+        <div><div class="n">15+</div><div class="l">Expert Judges</div></div>
+      </div>
+    </div>
+    <div class="hvis">
+      <div class="hvm">
+        <div class="hvt">🏆 Prototype Challenge</div>
+        <div class="hvh">Build. Demo. Win.</div>
+        <div class="hvs">Show a working prototype to expert judges and compete for top honours at Advyka 2026.</div>
+        <div class="chips">
+          <span class="chip" style="background:rgba(232,35,42,.12);color:#ff7a7d;border-color:rgba(232,35,42,.25)">Hardware</span>
+          <span class="chip" style="background:rgba(0,168,157,.12);color:#4dd9d0;border-color:rgba(0,168,157,.25)">Software</span>
+          <span class="chip" style="background:rgba(91,59,189,.12);color:#a78bfa;border-color:rgba(91,59,189,.25)">IoT</span>
+          <span class="chip" style="background:rgba(244,121,32,.12);color:#fca45a;border-color:rgba(244,121,32,.25)">AI/ML</span>
+        </div>
+      </div>
+      <div class="fc fc1 f1"><div class="fn ft">₹15K</div><div class="fl">First Prize</div></div>
+      <div class="fc fc2 f2"><div class="fn ct">200+</div><div class="fl">Teams Expected</div></div>
+      <div class="fc fc3 f3"><div class="fn" style="color:var(--pink)">march 22</div><div class="fl">Event Date</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mqt">
+    <div class="mqi"><span class="mqd"></span>Hardware Prototypes</div><div class="mqi"><span class="mqd"></span>Software Solutions</div>
+    <div class="mqi"><span class="mqd"></span>IoT Projects</div><div class="mqi"><span class="mqd"></span>AI / ML Models</div>
+    <div class="mqi"><span class="mqd"></span>Robotics</div><div class="mqi"><span class="mqd"></span>Smart Agriculture</div>
+    <div class="mqi"><span class="mqd"></span>Fintech</div><div class="mqi"><span class="mqd"></span>Green Energy</div>
+    <div class="mqi"><span class="mqd"></span>Healthcare Tech</div><div class="mqi"><span class="mqd"></span>Advyka 2026</div>
+    <div class="mqi"><span class="mqd"></span>Hardware Prototypes</div><div class="mqi"><span class="mqd"></span>Software Solutions</div>
+    <div class="mqi"><span class="mqd"></span>IoT Projects</div><div class="mqi"><span class="mqd"></span>AI / ML Models</div>
+    <div class="mqi"><span class="mqd"></span>Robotics</div><div class="mqi"><span class="mqd"></span>Smart Agriculture</div>
+    <div class="mqi"><span class="mqd"></span>Fintech</div><div class="mqi"><span class="mqd"></span>Green Energy</div>
+    <div class="mqi"><span class="mqd"></span>Healthcare Tech</div><div class="mqi"><span class="mqd"></span>Advyka 2026</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="mesh gbg">
+  <div class="con">
+    <div class="ag sv">
       <div>
-        <div class="login-title">Admin Panel</div>
+        <span class="slbl">About the Event</span>
+        <h2 class="sh">Where Engineers <span class="ft">Build the Future</span></h2>
+        <p style="color:var(--muted);font-size:.92rem;line-height:1.78;margin:14px 0">Prototype Challenge is the flagship technical event of Advyka 2026, the annual techfest of College of Engineering Perumon, organized by IEDC CEP — the Innovation & Entrepreneurship Development Cell supported by Kerala Startup Mission.</p>
+        <p style="color:var(--muted);font-size:.92rem;line-height:1.78;margin-bottom:14px">Participants bring working prototypes — hardware, software, or hybrid — and present them to industry professionals in a single-day intensive showcase. Projects are evaluated on innovation, real-world impact, technical depth, and presentation.</p>
+        <ul class="abulls">
+          <li><div class="abi" style="background:rgba(232,35,42,.12)">🚀</div><span><strong style="color:var(--text)">Open to all disciplines</strong> — EEE, CSE, ME, Civil, Biotech & more</span></li>
+          <li><div class="abi" style="background:rgba(0,168,157,.12)">🤝</div><span><strong style="color:var(--text)">Teams of 2–4</strong> — Collaborate and compete together</span></li>
+          <li><div class="abi" style="background:rgba(91,59,189,.12)">🏛️</div><span><strong style="color:var(--text)">Inter-college</strong> — Open to students across Kerala</span></li>
+          <li><div class="abi" style="background:rgba(244,121,32,.12)">💡</div><span><strong style="color:var(--text)">KSUM Mentorship</strong> — Get feedback from startup mentors</span></li>
+        </ul>
+        <a href="#register" class="btn btn-p" style="margin-top:6px">Register Now →</a>
       </div>
-    </div>
-    <p class="login-sub">Advyka 2026 · IEDC CEP</p>
-    <div class="login-fg"><label>Email Address</label><input type="email" id="loginEmail" placeholder="admin@iedccep.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <div class="login-fg"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <button class="login-btn" onclick="doLogin()" id="loginBtn">Sign In →</button>
-    <p class="login-err" id="loginErr"></p>
-  </div>
-</div>
-
-<!-- MAIN APP -->
-<div id="app" style="display:none">
-  <!-- SIDEBAR -->
-  <div id="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-row">
-        <div class="logo-icon">ADV</div>
-        <div>
-          <div class="sb-logo-text">Advyka '26</div>
-          <div class="sb-logo-sub">Admin Console</div>
-        </div>
-      </div>
-    </div>
-    <nav class="sb-nav">
-      <div class="sb-section">Overview</div>
-      <div class="sb-link active" onclick="showView('dashboard')">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
-      </div>
-      <div class="sb-section">Data</div>
-      <div class="sb-link" onclick="showView('registrations')">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/><polyline points="17 3 17 8 12 8"/></svg>
-        Registrations
-      </div>
-      <div class="sb-link" onclick="showView('attendance')">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-        Attendance
-      </div>
-      <div class="sb-section">Tools</div>
-      <div class="sb-link" onclick="exportCSV()">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export CSV
-      </div>
-      <div class="sb-link" onclick="showView('settings')">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        Settings
-      </div>
-    </nav>
-    <div class="sb-footer">
-      <div class="sb-admin">
-        <div class="sb-avatar" id="sbAvatar">A</div>
-        <div style="flex:1;overflow:hidden">
-          <div class="sb-admin-name" id="sbName">Admin</div>
-          <div class="sb-admin-role" id="sbRole">Administrator</div>
-        </div>
-        <svg onclick="logout()" style="cursor:pointer;opacity:.5;flex-shrink:0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <div class="avis">
+        <div class="avc"><div class="an ft">₹25K</div><div class="al">Prize Pool</div></div>
+        <div class="avc"><div class="an ct">200+</div><div class="al">Expected Teams</div></div>
+        <div class="avc"><div class="an" style="color:var(--pink)">15+</div><div class="al">Expert Judges</div></div>
+        <div class="avc"><div class="an" style="color:var(--yellow)">1</div><div class="al">Day of Competition</div></div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- MAIN -->
-  <div id="main">
-    <!-- TOPBAR -->
-    <div id="topbar">
-      <div class="tb-search">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="globalSearch" placeholder="Search teams, students, payment ID…" oninput="handleGlobalSearch(this.value)"/>
-      </div>
-      <div class="tb-right">
-        <span class="tb-badge" id="liveCount">0 registered</span>
-        <button class="tb-btn outline" onclick="refreshAll()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-          Refresh
-        </button>
-        <button class="tb-btn primary" onclick="exportCSV()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export CSV
-        </button>
-      </div>
-    </div>
-
-    <!-- CONTENT -->
-    <div id="content">
-
-      <!-- DASHBOARD VIEW -->
-      <div class="view active" id="view-dashboard">
-        <div style="margin-bottom:20px">
-          <div style="font-family:var(--ff);font-size:1.3rem;font-weight:800">Dashboard</div>
-          <div style="font-size:.8rem;color:var(--muted);margin-top:2px">Advyka 2026 — Prototype Challenge Overview</div>
-        </div>
-        <div class="stats-grid" id="statsGrid">
-          <div class="stat-card"><div class="stat-label">Total Registrations</div><div class="stat-val" id="statTotal">—</div><div class="stat-sub">All time</div></div>
-          <div class="stat-card"><div class="stat-label">Confirmed</div><div class="stat-val" id="statConfirmed">—</div><div class="stat-sub">Active registrations</div></div>
-          <div class="stat-card"><div class="stat-label">Attended</div><div class="stat-val" id="statAttended">—</div><div class="stat-sub" id="statAttPct">of total</div></div>
-          <div class="stat-card"><div class="stat-label">Revenue Collected</div><div class="stat-val" id="statRevenue">—</div><div class="stat-sub">@ ₹300/team</div></div>
-        </div>
-        <div class="charts-row">
-          <div class="chart-card">
-            <div class="chart-title">Registrations by Category</div>
-            <div class="bar-chart" id="catChart"></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-title">Recent Registrations</div>
-            <div class="recent-list" id="recentList"></div>
-          </div>
-        </div>
-        <div class="charts-row">
-          <div class="chart-card">
-            <div class="chart-title">Top Colleges</div>
-            <div class="bar-chart" id="collegeChart"></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-title">Registrations by Department</div>
-            <div class="bar-chart" id="deptChart"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- REGISTRATIONS VIEW -->
-      <div class="view" id="view-registrations">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-          <div>
-            <div style="font-family:var(--ff);font-size:1.3rem;font-weight:800">Registrations</div>
-            <div style="font-size:.8rem;color:var(--muted);margin-top:2px">All registered teams</div>
-          </div>
-        </div>
-        <div class="table-card">
-          <div class="table-toolbar">
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <span class="table-title">All Teams</span>
-              <span style="font-size:.75rem;color:var(--muted)" id="regCount"></span>
-            </div>
-            <div class="table-filters">
-              <select class="filter-select" onchange="applyFilters()" id="filterStatus">
-                <option value="">All Status</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="cancelled">Cancelled</option>
-                <option value="waitlist">Waitlist</option>
-              </select>
-              <select class="filter-select" onchange="applyFilters()" id="filterCat">
-                <option value="">All Categories</option>
-                <option>Hardware / Electronics</option>
-                <option>Software / App</option>
-                <option>IoT / Smart Systems</option>
-                <option>Artificial Intelligence / ML</option>
-                <option>Robotics / Automation</option>
-                <option>Healthcare Technology</option>
-                <option>Agriculture / Environment</option>
-                <option>Fintech / EdTech</option>
-                <option>Energy / Sustainability</option>
-                <option>Other</option>
-              </select>
-            </div>
-          </div>
-          <div class="bulk-actions" id="bulkActions">
-            <span class="bulk-count" id="bulkCount">0 selected</span>
-            <button class="action-btn del" onclick="bulkDelete()">Delete Selected</button>
-            <button class="action-btn att" onclick="bulkAttendance(true)">Mark Present</button>
-            <button class="action-btn" style="background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)" onclick="clearSelection()">Clear</button>
-          </div>
-          <div class="table-wrap">
-            <table id="regTable">
-              <thead>
-                <tr>
-                  <th><input type="checkbox" class="cb" id="selectAll" onchange="toggleSelectAll(this)"/></th>
-                  <th>#</th>
-                  <th>Team</th>
-                  <th>Leader</th>
-                  <th>College</th>
-                  <th>Project</th>
-                  <th>Category</th>
-                  <th>Payment ID</th>
-                  <th>Status</th>
-                  <th>Attendance</th>
-                  <th>Registered</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="regBody"></tbody>
-            </table>
-          </div>
-          <div class="table-footer">
-            <div class="page-info" id="pageInfo">—</div>
-            <div class="page-btns" id="pageBtns"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ATTENDANCE VIEW -->
-      <div class="view" id="view-attendance">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-          <div>
-            <div style="font-family:var(--ff);font-size:1.3rem;font-weight:800">Attendance</div>
-            <div style="font-size:.8rem;color:var(--muted);margin-top:2px">Check-in teams on event day</div>
-          </div>
-          <div style="display:flex;gap:10px">
-            <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center">
-              <div style="font-family:var(--ff);font-size:1.4rem;font-weight:800;color:var(--teal)" id="attPresent">0</div>
-              <div style="font-size:.68rem;color:var(--muted);margin-top:2px">Present</div>
-            </div>
-            <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center">
-              <div style="font-family:var(--ff);font-size:1.4rem;font-weight:800;color:var(--muted)" id="attAbsent">0</div>
-              <div style="font-size:.68rem;color:var(--muted);margin-top:2px">Absent</div>
-            </div>
-          </div>
-        </div>
-        <div style="margin-bottom:16px">
-          <div class="tb-search" style="max-width:100%">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="attSearch" placeholder="Search team name or leader name…" oninput="loadAttendance(1, this.value)"/>
-          </div>
-        </div>
-        <div class="table-card">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Team Name</th>
-                  <th>Leader</th>
-                  <th>College</th>
-                  <th>Members</th>
-                  <th>Project</th>
-                  <th>Check-in Time</th>
-                  <th>Attendance</th>
-                </tr>
-              </thead>
-              <tbody id="attBody"></tbody>
-            </table>
-          </div>
-          <div class="table-footer">
-            <div class="page-info" id="attPageInfo">—</div>
-            <div class="page-btns" id="attPageBtns"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SETTINGS VIEW -->
-      <div class="view" id="view-settings">
-        <div style="margin-bottom:20px">
-          <div style="font-family:var(--ff);font-size:1.3rem;font-weight:800">Settings</div>
-          <div style="font-size:.8rem;color:var(--muted);margin-top:2px">Manage your admin account</div>
-        </div>
-        <div style="max-width:460px">
-          <div class="table-card" style="padding:24px">
-            <div style="font-family:var(--ff);font-size:.88rem;font-weight:700;margin-bottom:16px">Change Password</div>
-            <div class="form-row full"><div class="fg"><label>Current Password</label><input type="password" id="curPwd" placeholder="Current password"/></div></div>
-            <div class="form-row full"><div class="fg"><label>New Password</label><input type="password" id="newPwd" placeholder="New password (min 6 chars)"/></div></div>
-            <div class="form-row full"><div class="fg"><label>Confirm New Password</label><input type="password" id="confPwd" placeholder="Repeat new password"/></div></div>
-            <button class="btn-save" onclick="changePassword()" style="margin-top:6px">Update Password</button>
-          </div>
-          <div class="table-card" style="padding:24px;margin-top:14px">
-            <div style="font-family:var(--ff);font-size:.88rem;font-weight:700;margin-bottom:8px">Signed In As</div>
-            <div style="font-size:.83rem;color:var(--muted)" id="settingsInfo">—</div>
-            <button class="btn-ghost" onclick="logout()" style="margin-top:14px">Sign Out</button>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
-
-<!-- MODALS -->
-<!-- Edit Modal -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal">
-    <div class="modal-head">
-      <span class="modal-title">Edit Registration</span>
-      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
-    </div>
-    <div class="modal-body" id="editBody"></div>
-    <div class="modal-footer">
-      <button class="btn-ghost" onclick="closeModal('editModal')">Cancel</button>
-      <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="con">
+    <div class="shd c sv"><span class="slbl">Schedule</span><h2 class="sh">Event <span class="ct">Timeline</span></h2><p class="ss">Mark your calendar — every milestone from registration to the grand finale.</p></div>
+    <div class="tlw sv">
+      <div class="tll"></div>
+      <div class="tli"><div class="tlc"><div class="tldt">Now Open</div><div class="tltt">Registrations Open</div><div class="tldc">Register your team and pay the entry fee online. Teams of 2–4 members welcome.</div></div><div class="tld"></div><div class="tlsp"></div></div>
+      <div class="tli"><div class="tlsp"></div><div class="tld" style="background:var(--teal)"></div><div class="tlc"><div class="tldt">March 30, 2026</div><div class="tltt">Abstract Submission</div><div class="tldc">Submit a 1-page abstract of your prototype idea. Shortlisted teams notified by email within 3 days.</div></div></div>
+      <div class="tli"><div class="tlc"><div class="tldt">April 12, 2026 · 9:00 AM</div><div class="tltt">Setup & Demo Round</div><div class="tldc">Set up your stall, demo your prototype to judges, and engage with industry visitors. Evaluation by the panel throughout the day.</div></div><div class="tld" style="background:var(--pink)"></div><div class="tlsp"></div></div>
+      <div class="tli"><div class="tlsp"></div><div class="tld" style="background:var(--yellow)"></div><div class="tlc"><div class="tldt">April 12, 2026 · 4:00 PM</div><div class="tltt">Prize Ceremony</div><div class="tldc">Winners announced and prizes awarded on stage at the Advyka 2026 closing ceremony. Same evening.</div></div></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Detail Modal -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal" style="max-width:680px">
-    <div class="modal-head">
-      <span class="modal-title" id="detailTitle">Registration Details</span>
-      <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+<!-- PRIZES -->
+<section id="prizes" class="mesh">
+  <div class="con">
+    <div class="shd c sv"><span class="slbl">Rewards</span><h2 class="sh">Win <span class="ft">Big</span></h2><p class="ss">Top prototypes take home serious prizes, trophies, certificates, and recognition from Kerala's startup ecosystem.</p></div>
+    <div class="pg sv">
+      <div class="pc silver"><div class="pmed">🥈</div><div class="prk">Runner Up</div><div class="pamt" style="color:#c0c8d8">₹8,000</div><div class="plbl">+ Certificate + Goodies</div></div>
+      <div class="pc gold" style="transform:scale(1.05);z-index:2"><div class="pmed">🏆</div><div class="prk">Winner</div><div class="pamt gc">₹15,000</div><div class="plbl">+ Trophy + Certificate + Mentorship</div></div>
+      <div class="pc bronze"><div class="pmed">🥉</div><div class="prk">2nd Runner Up</div><div class="pamt" style="color:#cd9f70">₹5,000</div><div class="plbl">+ Certificate + Goodies</div></div>
     </div>
-    <div class="modal-body" id="detailBody"></div>
-    <div class="modal-footer">
-      <button class="btn-ghost" onclick="closeModal('detailModal')">Close</button>
-      <button class="btn-save" onclick="openEditFromDetail()">Edit</button>
+    <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:28px">Special awards for Best Innovation &amp; Best Presentation · Total Prize Pool: ₹25,000</p>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules" class="gbg">
+  <div class="con">
+    <div class="shd c sv"><span class="slbl">Guidelines</span><h2 class="sh">Rules & <span class="ct">Eligibility</span></h2><p class="ss">Read carefully before registering. All participants must follow these guidelines.</p></div>
+    <div class="rg sv">
+      <div class="rc"><div class="rn">01</div><div class="rb"><h4>Team Size</h4><p>Teams must have 2–4 members. Solo entries are not accepted for this event.</p></div></div>
+      <div class="rc"><div class="rn">02</div><div class="rb"><h4>Eligibility</h4><p>Open to all undergraduate & postgraduate students from recognized colleges in Kerala.</p></div></div>
+      <div class="rc"><div class="rn">03</div><div class="rb"><h4>Working Prototype Required</h4><p>A functional prototype must be physically present. PPT-only or simulation-only entries will not be evaluated.</p></div></div>
+      <div class="rc"><div class="rn">04</div><div class="rb"><h4>Originality</h4><p>Projects must be original work. Plagiarism or purchased kits presented as original will result in disqualification.</p></div></div>
+      <div class="rc"><div class="rn">05</div><div class="rb"><h4>Registration Fee</h4><p>₹300 per team (non-refundable). Payment via Razorpay during registration. Confirmation email sent instantly.</p></div></div>
+      <div class="rc"><div class="rn">06</div><div class="rb"><h4>ID Proof Required</h4><p>All team members must carry valid college ID cards on the day of the event for entry verification.</p></div></div>
+      <div class="rc"><div class="rn">07</div><div class="rb"><h4>Power & Space</h4><p>Each team gets a 4×4 ft table + one 5A socket. Additional power requirements must be declared at registration.</p></div></div>
+      <div class="rc"><div class="rn">08</div><div class="rb"><h4>Judges' Decision</h4><p>The judging panel's decision is final and binding. No appeals after results are announced.</p></div></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Confirm Delete Modal -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal confirm-modal">
-    <div class="modal-body" style="padding:28px 24px;text-align:center">
-      <div class="confirm-icon">🗑️</div>
-      <div class="confirm-title" id="confirmTitle">Delete Registration?</div>
-      <p class="confirm-sub" id="confirmSub">This action cannot be undone.</p>
-    </div>
-    <div class="modal-footer" style="justify-content:center">
-      <button class="btn-ghost" onclick="closeModal('confirmModal')">Cancel</button>
-      <button class="btn-danger" id="confirmBtn">Delete</button>
+<!-- CRITERIA -->
+<section id="criteria">
+  <div class="con">
+    <div class="shd c sv"><span class="slbl">Evaluation</span><h2 class="sh">Judging <span class="ft">Criteria</span></h2><p class="ss">Projects evaluated across six dimensions by industry professionals and KSUM mentors.</p></div>
+    <div class="cg sv">
+      <div class="cc"><div class="ci2">💡</div><div class="cp">25%</div><div class="ct2">Innovation</div><div class="cd">How novel is the idea? Does it solve a problem in an unconventional way?</div></div>
+      <div class="cc"><div class="ci2">⚙️</div><div class="cp">20%</div><div class="ct2">Technical Depth</div><div class="cd">Complexity, implementation quality, and understanding of the technology used.</div></div>
+      <div class="cc"><div class="ci2">🌍</div><div class="cp">20%</div><div class="ct2">Real-World Impact</div><div class="cd">Does the prototype address a genuine problem with tangible potential impact?</div></div>
+      <div class="cc"><div class="ci2">🎯</div><div class="cp">15%</div><div class="ct2">Functionality</div><div class="cd">Does the prototype actually work as demonstrated? Reliability matters.</div></div>
+      <div class="cc"><div class="ci2">🎤</div><div class="cp">12%</div><div class="ct2">Presentation</div><div class="cd">Clarity, confidence, and ability to explain and sell the idea to judges.</div></div>
+      <div class="cc"><div class="ci2">📈</div><div class="cp">8%</div><div class="ct2">Scalability</div><div class="cd">Can this prototype realistically be taken to a product or startup?</div></div>
     </div>
   </div>
-</div>
+</section>
 
-<div id="toast"></div>
+<!-- REGISTER -->
+<section id="register" class="mesh gbg">
+  <div class="rc2">
+    <div class="shd c sv"><span class="slbl">Join the Challenge</span><h2 class="sh">Register Your <span class="ft">Team</span></h2><p class="ss">Takes under 3 minutes. Pay securely via Razorpay. Confirmation email sent immediately.</p></div>
+    <div class="rcard sv" id="rcard">
+      <div class="rh">
+        <div class="rhtag">Prototype Challenge · Advyka 2026</div>
+        <div class="rhtt">Team Registration</div>
+        <div class="rhs">College of Engineering Perumon · IEDC CEP</div>
+        <div class="feebadge">💳 Registration Fee: ₹300 per team</div>
+      </div>
+      <div class="sbar" id="sbar">
+        <div class="sp2 active" id="s1"><div class="sn">1</div><div class="snl">Team Leader</div></div>
+        <div class="sl"></div>
+        <div class="sp2" id="s2"><div class="sn">2</div><div class="snl">Team Members</div></div>
+        <div class="sl"></div>
+        <div class="sp2" id="s3"><div class="sn">3</div><div class="snl">Project</div></div>
+        <div class="sl"></div>
+        <div class="sp2" id="s4"><div class="sn">4</div><div class="snl">Payment</div></div>
+      </div>
+      <div class="fb2">
+
+        <!-- STEP 1 -->
+        <div class="fstep active" id="step1">
+          <p style="font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:4px">Team Leader Details</p>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:20px">This person will be the primary contact for all communications.</p>
+          <div class="frow">
+            <div class="fg"><label>Full Name<span class="req">*</span></label><input type="text" id="lName" placeholder="e.g. Arjun Krishna"/><span class="errmsg" id="e-lName">Please enter your full name</span></div>
+            <div class="fg"><label>Email Address<span class="req">*</span></label><input type="email" id="lEmail" placeholder="arjun@example.com"/><span class="errmsg" id="e-lEmail">Enter a valid email</span></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Phone Number<span class="req">*</span></label><input type="tel" id="lPhone" placeholder="9876543210" maxlength="13"/><span class="errmsg" id="e-lPhone">Enter valid 10-digit number</span></div>
+            <div class="fg"><label>Department<span class="req">*</span></label>
+              <select id="lDept"><option value="">Select Department</option><option>Computer Science & Engineering</option><option>Electronics & Communication</option><option>Electrical & Electronics</option><option>Mechanical Engineering</option><option>Civil Engineering</option><option>Information Technology</option><option>Biotechnology</option><option>Other</option></select>
+              <span class="errmsg" id="e-lDept">Please select your department</span></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>College Name<span class="req">*</span></label><input type="text" id="lCollege" placeholder="College of Engineering Perumon"/><span class="errmsg" id="e-lCollege">Please enter your college</span></div>
+            <div class="fg"><label>Year of Study<span class="req">*</span></label>
+              <select id="lYear"><option value="">Select Year</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>PG (1st Year)</option><option>PG (2nd Year)</option></select>
+              <span class="errmsg" id="e-lYear">Please select your year</span></div>
+          </div>
+          <div class="frow full">
+            <div class="fg"><label>Team Name<span class="req">*</span></label><input type="text" id="tName" placeholder="e.g. Team Nexus"/><span class="errmsg" id="e-tName">Please enter your team name</span></div>
+          </div>
+          <div class="fnav"><span class="si">Step 1 of 4</span><button class="btn btn-p" onclick="nx(1)">Next: Team Members →</button></div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="fstep" id="step2">
+          <p style="font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:4px">Team Members</p>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:20px">Add 1–3 more members (you are the leader). At least 1 member required.</p>
+          <div id="mc"></div>
+          <button class="addm" onclick="addM()" id="addMBtn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Add Another Member
+          </button>
+          <p id="merr" style="font-size:.76rem;color:var(--red);margin-top:9px;display:none">Please add at least 1 team member.</p>
+          <div class="fnav"><button class="btn btn-o" onclick="pv(2)">← Back</button><span class="si">Step 2 of 4</span><button class="btn btn-p" onclick="nx(2)">Next: Project →</button></div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="fstep" id="step3">
+          <p style="font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:4px">Project Details</p>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:20px">Tell us about what you're building.</p>
+          <div class="frow">
+            <div class="fg"><label>Project Title<span class="req">*</span></label><input type="text" id="pTitle" placeholder="e.g. SmartHarvest — IoT Crop Monitor"/><span class="errmsg" id="e-pTitle">Please enter your project title</span></div>
+            <div class="fg"><label>Category<span class="req">*</span></label>
+              <select id="pCat"><option value="">Select Category</option><option>Hardware / Electronics</option><option>Software / App</option><option>IoT / Smart Systems</option><option>Artificial Intelligence / ML</option><option>Robotics / Automation</option><option>Healthcare Technology</option><option>Agriculture / Environment</option><option>Fintech / EdTech</option><option>Energy / Sustainability</option><option>Other</option></select>
+              <span class="errmsg" id="e-pCat">Please select a category</span></div>
+          </div>
+          <div class="frow full"><div class="fg"><label>Problem Statement<span class="req">*</span></label><textarea id="pProb" rows="3" placeholder="What problem does your prototype solve? (2–3 sentences)"></textarea><span class="errmsg" id="e-pProb">Please describe the problem</span></div></div>
+          <div class="frow full"><div class="fg"><label>Brief Description<span class="req">*</span></label><textarea id="pDesc" rows="3" placeholder="How does your prototype work? What tech/materials are used?"></textarea><span class="errmsg" id="e-pDesc">Please add a description</span></div></div>
+          <div class="frow">
+            <div class="fg"><label>Power Requirement</label>
+              <select id="pPow"><option>Standard (1 socket, 5A)</option><option>High Power (3-phase / more than 5A)</option><option>Battery-powered (no socket needed)</option></select></div>
+            <div class="fg"><label>Special Requirements</label><input type="text" id="pSpec" placeholder="e.g. Water supply, projector…"/></div>
+          </div>
+          <div class="fnav"><button class="btn btn-o" onclick="pv(3)">← Back</button><span class="si">Step 3 of 4</span><button class="btn btn-p" onclick="nx(3)">Next: Payment →</button></div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="fstep" id="step4">
+          <div class="pi">
+            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:7px;font-weight:600">Registration Fee</div>
+            <div class="pav">₹300 <span class="pac">/ per team · non-refundable</span></div>
+            <div class="pnote">Payment processed securely via <strong style="color:var(--text)">Razorpay</strong>. Registration confirmed only after successful payment. Confirmation email sent instantly with your Team ID.</div>
+            <div class="pmm"><span class="pm">UPI</span><span class="pm">GPay / PhonePe / Paytm</span><span class="pm">Debit / Credit Card</span><span class="pm">Net Banking</span></div>
+          </div>
+          <div style="background:rgba(0,0,0,.22);border:1px solid var(--border);border-radius:13px;padding:16px 18px;margin-bottom:20px">
+            <p style="font-family:var(--ff);font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:11px;text-transform:uppercase;letter-spacing:.08em">Registration Summary</p>
+            <div id="summ" style="display:flex;flex-direction:column;gap:7px;font-size:.83rem;color:var(--muted)"></div>
+          </div>
+          <div style="background:rgba(244,121,32,.06);border:1px solid rgba(244,121,32,.16);border-radius:11px;padding:13px 15px;margin-bottom:20px;font-size:.78rem;color:rgba(240,234,248,.55);line-height:1.65">
+            ⚠️ <strong style="color:var(--text)">Verify all details above before paying.</strong> By proceeding you agree to the event rules. Registration fee is non-refundable.
+          </div>
+          <div class="fnav">
+            <button class="btn btn-o" onclick="pv(4)">← Back</button>
+            <span class="si">Step 4 of 4</span>
+            <button class="btn btn-p btnlg" onclick="pay()" id="payBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Pay ₹300 & Register
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- SUCCESS -->
+      <div class="succ" id="succ">
+        <div class="sico">✅</div>
+        <div class="stit">You're <span class="ft">Registered!</span></div>
+        <p class="ssub">Your team is confirmed for Prototype Challenge at Advyka 2026. Check your email for full details and your team ID.</p>
+        <div class="cid" id="cid">Confirmation ID: …</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="#about" class="btn btn-o">← Back to Top</a>
+          <button class="btn btn-p" onclick="shareR()">📤 Share</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="con">
+    <div class="shd c sv"><span class="slbl">The People Behind It</span><h2 class="sh">Organizing <span class="ct">Committee</span></h2><p class="ss">The IEDC CEP execom team making Advyka 2026 a reality.</p></div>
+    <div class="tg sv" id="teamGrid">
+      <!-- Team cards — replace with real names, roles and image URLs -->
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="gbg">
+  <div class="con">
+    <div class="cg2">
+      <div class="sv">
+        <span class="slbl">Get in Touch</span>
+        <h2 style="font-family:var(--ff);font-size:clamp(1.7rem,3vw,2.4rem);font-weight:800;line-height:1.18;margin-bottom:12px">Questions? <span class="ft">We're here.</span></h2>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.78;margin-bottom:26px">Reach out for sponsorship queries, logistics, or anything about the Prototype Challenge at Advyka 2026.</p>
+        <div class="cii"><div class="cico" style="background:rgba(232,35,42,.1)">📍</div><div class="cib"><strong>Venue</strong><span>College of Engineering Perumon, Perinad, Kollam, Kerala — 691 601</span></div></div>
+        <div class="cii"><div class="cico" style="background:rgba(0,168,157,.1)">✉️</div><div class="cib"><strong>Email</strong><span><a href="mailto:ceperumon.iedc@gmail.com" style="color:var(--teal)">ceperumon.iedc@gmail.com</a></span></div></div>
+        <div class="cii"><div class="cico" style="background:rgba(244,121,32,.1)">📱</div><div class="cib"><strong>Event Coordinator</strong><span>+91 98765 43210 (Replace with real number)</span></div></div>
+        <div class="cii"><div class="cico" style="background:rgba(91,59,189,.1)">🌐</div><div class="cib"><strong>Follow</strong><span>@iedccep on Instagram & LinkedIn</span></div></div>
+      </div>
+      <div class="cfw sv">
+        <p style="font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:16px">Send a Message</p>
+        <div id="cf">
+          <div class="cfr">
+            <div class="fg"><label>Your Name</label><input type="text" id="cfN" placeholder="Full Name"/></div>
+            <div class="fg"><label>Email</label><input type="email" id="cfE" placeholder="you@example.com"/></div>
+          </div>
+          <div class="cfr1"><div class="fg"><label>Subject</label><select id="cfS"><option>General Enquiry</option><option>Sponsorship</option><option>Registration Issue</option><option>Technical Query</option><option>Media / Press</option></select></div></div>
+          <div class="cfr1"><div class="fg"><label>Message</label><textarea id="cfM" rows="4" placeholder="Your message..."></textarea></div></div>
+          <div style="display:flex;justify-content:flex-end;margin-top:6px"><button class="btn btn-p" onclick="sendMsg()">Send Message →</button></div>
+        </div>
+        <div class="cfsuc" id="cfsuc"><div style="font-size:1.8rem;margin-bottom:8px">✅</div><p style="font-family:var(--ff);font-size:.95rem;font-weight:700;margin-bottom:5px">Message Sent!</p><p style="font-size:.8rem;color:var(--muted)">We'll get back to you within 24 hours.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ftl"></div>
+  <div class="fin" style="padding-top:44px">
+    <div class="fg2">
+      <div>
+        <div class="logo"><div class="li">ADV</div><div class="ls"><span>Advyka <span class="ft">'26</span></span><span class="sub">IEDC CEP · Prototype</span></div></div>
+        <p>Prototype Challenge — flagship technical event of Advyka 2026, the annual techfest of College of Engineering Perumon. Organized by IEDC CEP, supported by Kerala Startup Mission.</p>
+      </div>
+      <div class="fcol"><h4>Quick Links</h4><ul><li><a href="#about">About</a></li><li><a href="#timeline">Schedule</a></li><li><a href="#prizes">Prizes</a></li><li><a href="#rules">Rules</a></li><li><a href="#register">Register</a></li></ul></div>
+      <div class="fcol"><h4>Contact</h4><ul><li><a href="mailto:ceperumon.iedc@gmail.com">ceperumon.iedc@gmail.com</a></li><li><span style="color:var(--muted);font-size:.83rem">Perinad, Kollam, Kerala</span></li><li><a href="#">Instagram</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+    </div>
+    <div class="fbot">
+      <p>© 2026 IEDC CEP — College of Engineering Perumon. All rights reserved.</p>
+      <div class="sl2"><a href="#">📷</a><a href="#">💼</a><a href="#">🐙</a></div>
+    </div>
+  </div>
+</footer>
 
 <script>
-const API = '';  // Same origin — server serves this file
-let TOKEN = localStorage.getItem('adv_token') || '';
-let currentAdmin = null;
-let editingId = null;
-let currentPage = 1;
-let currentAttPage = 1;
-let selectedIds = new Set();
-let regData = [];
+/* ── CONFIG ── */
+const CFG = {
+  RAZORPAY_KEY: 'rzp_test_YourKeyHere',  // 🔑 Replace with your Razorpay key
+  FEE: 30000                              // ₹300 in paise
+};
 
-/* ══════════════════════════════════════
-   API HELPER
-══════════════════════════════════════ */
-async function api(method, path, body) {
-  const opts = {
-    method,
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` }
-  };
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(API + path, opts);
-  if (r.status === 401) { logout(); return null; }
-  return r.json();
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('sc', window.scrollY > 40));
+
+/* ── MOBILE MENU ── */
+function tmenu() { document.getElementById('mm').classList.toggle('open'); }
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); }), {threshold:.1});
+document.querySelectorAll('.sv').forEach(el => obs.observe(el));
+
+/* ── TEAM DATA — Replace with real data ── */
+const TEAM = [
+  {name:'Arjun Krishna',role:'Nodal Officer',color:'#f47920',img:'https://picsum.photos/seed/a1/400/500'},
+  {name:'Meera Nair',role:'Chair',color:'#00a89d',img:'https://picsum.photos/seed/b2/400/500'},
+  {name:'Rahul Dev',role:'Vice Chair',color:'#e63a8a',img:'https://picsum.photos/seed/c3/400/500'},
+  {name:'Sneha Pillai',role:'Secretary',color:'#f9c423',img:'https://picsum.photos/seed/d4/400/500'},
+  {name:'Aditya Suresh',role:'Technical Lead',color:'#00a89d',img:'https://picsum.photos/seed/e5/400/500'},
+  {name:'Niya George',role:'Design Lead',color:'#5b3bbd',img:'https://picsum.photos/seed/f6/400/500'},
+  {name:'Vishnu R',role:'Outreach Lead',color:'#e8232a',img:'https://picsum.photos/seed/g7/400/500'},
+  {name:'Diya Mohan',role:'Finance',color:'#1055d4',img:'https://picsum.photos/seed/h8/400/500'},
+];
+document.getElementById('teamGrid').innerHTML = TEAM.map(m=>`
+  <div class="tc">
+    <div class="tcimg"><img src="${m.img}" alt="${m.name}" loading="lazy"/><div class="tco"></div></div>
+    <div class="tcb"><div class="tcn">${m.name}</div><div class="tcr" style="color:${m.color}">${m.role}</div></div>
+  </div>`).join('');
+
+/* ── MEMBER FORM ── */
+let mc = 0;
+function addM(){
+  if(mc>=3)return;
+  mc++;
+  const id=mc;
+  const depts = ['','Computer Science & Engineering','Electronics & Communication','Electrical & Electronics','Mechanical Engineering','Civil Engineering','Information Technology','Biotechnology','Other'];
+  const years = ['','1st Year','2nd Year','3rd Year','4th Year','PG (1st Year)','PG (2nd Year)'];
+  const el=document.createElement('div');
+  el.className='tmr';el.id=`m${id}`;
+  el.innerHTML=`
+    <div class="mh"><span class="mlbl">Member ${id+1}</span>${id>1?`<button class="mrm" onclick="rmM(${id})">Remove</button>`:''}</div>
+    <div class="frow">
+      <div class="fg"><label>Full Name<span class="req">*</span></label><input type="text" id="m${id}n" placeholder="Member name"/><span class="errmsg" id="e-m${id}n">Required</span></div>
+      <div class="fg"><label>Email<span class="req">*</span></label><input type="email" id="m${id}e" placeholder="member@example.com"/><span class="errmsg" id="e-m${id}e">Valid email required</span></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Phone<span class="req">*</span></label><input type="tel" id="m${id}p" placeholder="9876543210" maxlength="13"/><span class="errmsg" id="e-m${id}p">Valid phone required</span></div>
+      <div class="fg"><label>Department<span class="req">*</span></label>
+        <select id="m${id}d">${depts.map(d=>`<option value="${d}">${d||'Select'}</option>`).join('')}</select>
+        <span class="errmsg" id="e-m${id}d">Required</span></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>College</label><input type="text" id="m${id}c" placeholder="College name"/></div>
+      <div class="fg"><label>Year</label><select id="m${id}y">${years.map(y=>`<option value="${y}">${y||'Select Year'}</option>`).join('')}</select></div>
+    </div>`;
+  document.getElementById('mc').appendChild(el);
+  updBtn();
+}
+function rmM(id){ document.getElementById(`m${id}`)?.remove(); mc--; updBtn(); }
+function updBtn(){
+  const b=document.getElementById('addMBtn');
+  if(mc>=3){b.style.opacity='.4';b.style.pointerEvents='none';b.textContent='Maximum 3 members added';}
+  else{b.style.opacity='1';b.style.pointerEvents='auto';b.innerHTML=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Add Another Member`;}
+}
+window.addEventListener('DOMContentLoaded', ()=>addM());
+
+/* ── VALIDATION ── */
+function se(id,show){const el=document.getElementById(id);const er=document.getElementById('e-'+id);if(el)el.classList.toggle('err',show);if(er)er.classList.toggle('show',show);return!show;}
+function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+function isPhone(v){return /^(\+91)?[6-9]\d{9}$/.test(v.replace(/\s/g,''))}
+function g(id){return document.getElementById(id)?.value||''}
+
+function v1(){
+  let ok=true;
+  ok=se('lName',!g('lName').trim())&&ok;ok=se('lEmail',!isEmail(g('lEmail')))&&ok;
+  ok=se('lPhone',!isPhone(g('lPhone')))&&ok;ok=se('lDept',!g('lDept'))&&ok;
+  ok=se('lCollege',!g('lCollege').trim())&&ok;ok=se('lYear',!g('lYear'))&&ok;
+  ok=se('tName',!g('tName').trim())&&ok;return ok;
+}
+function v2(){
+  if(mc===0){document.getElementById('merr').style.display='block';return false;}
+  document.getElementById('merr').style.display='none';
+  let ok=true;
+  for(let i=1;i<=mc;i++){
+    const el=document.getElementById(`m${i}`);if(!el)continue;
+    ok=se(`m${i}n`,!document.getElementById(`m${i}n`)?.value.trim())&&ok;
+    ok=se(`m${i}e`,!isEmail(document.getElementById(`m${i}e`)?.value||''))&&ok;
+    ok=se(`m${i}p`,!isPhone(document.getElementById(`m${i}p`)?.value||''))&&ok;
+    ok=se(`m${i}d`,!document.getElementById(`m${i}d`)?.value)&&ok;
+  }return ok;
+}
+function v3(){
+  let ok=true;
+  ok=se('pTitle',!g('pTitle').trim())&&ok;ok=se('pCat',!g('pCat'))&&ok;
+  ok=se('pProb',!g('pProb').trim())&&ok;ok=se('pDesc',!g('pDesc').trim())&&ok;
+  return ok;
 }
 
-/* ══════════════════════════════════════
-   AUTH
-══════════════════════════════════════ */
-async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass  = document.getElementById('loginPass').value;
-  const err   = document.getElementById('loginErr');
-  const btn   = document.getElementById('loginBtn');
-  if (!email || !pass) { showErr(err, 'Please enter email and password'); return; }
-  btn.textContent = 'Signing in…'; btn.disabled = true;
+/* ── STEP NAV ── */
+let cs=1;
+function nx(f){
+  const vs={1:v1,2:v2,3:v3};
+  if(vs[f]&&!vs[f]())return;
+  if(f===3)buildSum();
+  document.getElementById(`step${f}`).classList.remove('active');
+  document.getElementById(`step${f+1}`).classList.add('active');
+  document.getElementById(`s${f}`).classList.remove('active');
+  document.getElementById(`s${f}`).classList.add('done');
+  document.getElementById(`s${f+1}`).classList.add('active');
+  cs=f+1;
+  document.getElementById('rcard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pv(f){
+  document.getElementById(`step${f}`).classList.remove('active');
+  document.getElementById(`step${f-1}`).classList.add('active');
+  document.getElementById(`s${f}`).classList.remove('active');
+  document.getElementById(`s${f-1}`).classList.remove('done');
+  document.getElementById(`s${f-1}`).classList.add('active');
+  cs=f-1;
+  document.getElementById('rcard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── SUMMARY ── */
+function buildSum(){
+  const mns=[];
+  for(let i=1;i<=mc;i++){const el=document.getElementById(`m${i}`);if(!el)continue;mns.push(document.getElementById(`m${i}n`)?.value||'');}
+  document.getElementById('summ').innerHTML=`
+    <div style="display:flex;justify-content:space-between"><span>Team Name</span><strong style="color:var(--text)">${g('tName')}</strong></div>
+    <div style="display:flex;justify-content:space-between"><span>Leader</span><strong style="color:var(--text)">${g('lName')}</strong></div>
+    <div style="display:flex;justify-content:space-between"><span>College</span><strong style="color:var(--text)">${g('lCollege')}</strong></div>
+    <div style="display:flex;justify-content:space-between"><span>Members</span><strong style="color:var(--text)">${mns.join(', ')||'—'}</strong></div>
+    <div style="display:flex;justify-content:space-between"><span>Project</span><strong style="color:var(--text)">${g('pTitle')}</strong></div>
+    <div style="display:flex;justify-content:space-between"><span>Category</span><strong style="color:var(--text)">${g('pCat')}</strong></div>
+    <div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between"><span style="font-weight:600">Total</span><strong style="color:var(--orange);font-family:var(--ff)">₹300</strong></div>`;
+}
+
+/* ── COLLECT DATA ── */
+function collectData(pid){
+  const members=[];
+  for(let i=1;i<=mc;i++){
+    const el=document.getElementById(`m${i}`);if(!el)continue;
+    members.push({name:document.getElementById(`m${i}n`)?.value||'',email:document.getElementById(`m${i}e`)?.value||'',phone:document.getElementById(`m${i}p`)?.value||'',dept:document.getElementById(`m${i}d`)?.value||'',college:document.getElementById(`m${i}c`)?.value||'',year:document.getElementById(`m${i}y`)?.value||''});
+  }
+  return {
+    timestamp:new Date().toISOString(),team_name:g('tName'),
+    leader_name:g('lName'),leader_email:g('lEmail'),leader_phone:g('lPhone'),
+    leader_dept:g('lDept'),leader_college:g('lCollege'),leader_year:g('lYear'),
+    member_count:members.length+1,member_names:members.map(m=>m.name).join(', '),
+    members_json:JSON.stringify(members),
+    proj_title:g('pTitle'),proj_category:g('pCat'),proj_problem:g('pProb'),
+    proj_desc:g('pDesc'),proj_power:g('pPow'),proj_special:g('pSpec'),
+    payment_id:pid,amount_paid:'₹300',payment_status:'SUCCESS'
+  };
+}
+
+/* ── SEND TO BACKEND ── */
+async function toSheets(data) {
   try {
-    const r = await fetch('/api/admin/login', {
+    const members = [];
+    for (let i = 1; i <= mc; i++) {
+      const el = document.getElementById(`m${i}`); if (!el) continue;
+      members.push({
+        name:    document.getElementById(`m${i}n`)?.value || '',
+        email:   document.getElementById(`m${i}e`)?.value || '',
+        phone:   document.getElementById(`m${i}p`)?.value || '',
+        dept:    document.getElementById(`m${i}d`)?.value || '',
+        college: document.getElementById(`m${i}c`)?.value || '',
+        year:    document.getElementById(`m${i}y`)?.value || '',
+      });
+    }
+    const payload = {
+      teamName:    data.team_name,
+      memberCount: data.member_count,
+      leader: {
+        name:    data.leader_name,
+        email:   data.leader_email,
+        phone:   data.leader_phone,
+        dept:    data.leader_dept,
+        college: data.leader_college,
+        year:    data.leader_year,
+      },
+      members,
+      project: {
+        title:    data.proj_title,
+        category: data.proj_category,
+        problem:  data.proj_problem,
+        desc:     data.proj_desc,
+        power:    data.proj_power,
+        special:  data.proj_special,
+      },
+      payment: {
+        id:     data.payment_id,
+        amount: data.amount_paid,
+        status: data.payment_status,
+      },
+    };
+    const res = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: pass })
+      body: JSON.stringify(payload),
     });
-    const d = await r.json();
-    if (!r.ok) { showErr(err, d.error || 'Login failed'); btn.textContent = 'Sign In →'; btn.disabled = false; return; }
-    TOKEN = d.token;
-    localStorage.setItem('adv_token', TOKEN);
-    currentAdmin = d.admin;
-    initApp();
-  } catch(e) {
-    showErr(err, 'Cannot connect to server. Is it running?');
-    btn.textContent = 'Sign In →'; btn.disabled = false;
-  }
-}
-function showErr(el, msg) { el.textContent = msg; el.classList.add('show'); }
-
-async function checkAuth() {
-  if (!TOKEN) return;
-  const r = await api('GET', '/api/admin/me');
-  if (r?.admin) { currentAdmin = r.admin; initApp(); }
-}
-
-function initApp() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  const n = currentAdmin?.name || 'Admin';
-  document.getElementById('sbAvatar').textContent = n[0].toUpperCase();
-  document.getElementById('sbName').textContent = n;
-  document.getElementById('sbRole').textContent = currentAdmin?.role || 'admin';
-  document.getElementById('settingsInfo').textContent = `${n} — ${currentAdmin?.email}`;
-  loadDashboard();
-}
-
-function logout() {
-  TOKEN = ''; localStorage.removeItem('adv_token');
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginEmail').value = '';
-  document.getElementById('loginPass').value = '';
-}
-
-/* ══════════════════════════════════════
-   VIEWS
-══════════════════════════════════════ */
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
-  event.currentTarget?.classList.add('active');
-  if (name === 'dashboard')     loadDashboard();
-  if (name === 'registrations') loadRegistrations();
-  if (name === 'attendance')    loadAttendance();
-}
-
-/* ══════════════════════════════════════
-   DASHBOARD
-══════════════════════════════════════ */
-async function loadDashboard() {
-  const d = await api('GET', '/api/admin/stats');
-  if (!d) return;
-  document.getElementById('statTotal').textContent     = d.total;
-  document.getElementById('statConfirmed').textContent = d.confirmed;
-  document.getElementById('statAttended').textContent  = d.attended;
-  document.getElementById('statRevenue').textContent   = d.totalRevenue;
-  document.getElementById('liveCount').textContent     = `${d.total} registered`;
-  const pct = d.total > 0 ? Math.round((d.attended/d.total)*100) : 0;
-  document.getElementById('statAttPct').textContent = `${pct}% attendance rate`;
-
-  // Category chart
-  renderBarChart('catChart', d.byCategory, ['#f47920','#e8232a','#00a89d','#5b3bbd','#e63a8a','#f9c423','#1055d4']);
-
-  // College chart
-  renderBarChart('collegeChart', d.byCollege, ['#1055d4','#5b3bbd','#00a89d','#e63a8a','#f47920']);
-
-  // Dept chart
-  renderBarChart('deptChart', d.byDept, ['#00a89d','#1055d4','#5b3bbd','#e63a8a','#f9c423']);
-
-  // Recent
-  const rl = document.getElementById('recentList');
-  rl.innerHTML = d.recentRegs.map(r => `
-    <div class="recent-item">
-      <div class="ri-avatar">${(r.teamName||'?')[0].toUpperCase()}</div>
-      <div>
-        <div class="ri-name">${r.teamName}</div>
-        <div class="ri-sub">${r['leader.college'] || r.leader?.college || ''} · ${r['project.title'] || r.project?.title || ''}</div>
-      </div>
-      <div class="ri-time">${timeAgo(r.createdAt)}</div>
-    </div>`).join('') || '<p style="color:var(--muted);font-size:.8rem;text-align:center">No registrations yet</p>';
-}
-
-function renderBarChart(containerId, data, colors) {
-  const el = document.getElementById(containerId);
-  if (!data || data.length === 0) { el.innerHTML = '<p style="color:var(--muted);font-size:.78rem">No data yet</p>'; return; }
-  const max = Math.max(...data.map(d => d.count));
-  el.innerHTML = data.map((d, i) => `
-    <div class="bar-row">
-      <div class="bar-label" title="${d._id}">${d._id || 'Unknown'}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${max>0?(d.count/max*100):0}%;background:${colors[i%colors.length]}"></div></div>
-      <div class="bar-count">${d.count}</div>
-    </div>`).join('');
-}
-
-/* ══════════════════════════════════════
-   REGISTRATIONS TABLE
-══════════════════════════════════════ */
-let regFilters = { status: '', category: '', search: '' };
-
-async function loadRegistrations(page = 1) {
-  currentPage = page;
-  const params = new URLSearchParams({
-    page, limit: 20,
-    search:   regFilters.search   || '',
-    status:   regFilters.status   || '',
-    category: regFilters.category || '',
-  });
-  const d = await api('GET', `/api/admin/registrations?${params}`);
-  if (!d) return;
-  regData = d.data;
-  document.getElementById('regCount').textContent = `(${d.total} total)`;
-  document.getElementById('liveCount').textContent = `${d.total} registered`;
-
-  const tbody = document.getElementById('regBody');
-  if (!d.data.length) {
-    tbody.innerHTML = `<tr><td colspan="12"><div class="no-data"><div class="nd-icon">📭</div>No registrations found</div></td></tr>`;
-    document.getElementById('pageInfo').textContent = 'No results';
-    document.getElementById('pageBtns').innerHTML = '';
-    return;
-  }
-
-  tbody.innerHTML = d.data.map((r, i) => `
-    <tr>
-      <td><input type="checkbox" class="cb" onchange="toggleSelect('${r._id}',this)" ${selectedIds.has(r._id)?'checked':''}></td>
-      <td style="color:var(--muted);font-size:.75rem">${(page-1)*20+i+1}</td>
-      <td><strong style="font-size:.83rem">${esc(r.teamName)}</strong><div style="font-size:.7rem;color:var(--muted)">${r.memberCount} members</div></td>
-      <td><div style="font-size:.82rem">${esc(r.leader?.name||'')}</div><div style="font-size:.7rem;color:var(--muted)">${esc(r.leader?.phone||'')}</div></td>
-      <td style="font-size:.8rem;max-width:130px;overflow:hidden;text-overflow:ellipsis">${esc(r.leader?.college||'')}</td>
-      <td style="max-width:150px"><div style="font-size:.8rem;overflow:hidden;text-overflow:ellipsis">${esc(r.project?.title||'')}</div></td>
-      <td><span style="font-size:.72rem;background:rgba(91,59,189,.1);border:1px solid rgba(91,59,189,.2);padding:2px 7px;border-radius:5px;color:#a78bfa">${esc(r.project?.category||'')}</span></td>
-      <td><span style="font-family:monospace;font-size:.72rem;color:var(--muted)">${esc(r.payment?.id||'').slice(0,16)}…</span></td>
-      <td><span class="status-badge ${r.status}">${r.status}</span></td>
-      <td>
-        <button class="att-toggle ${r.attendance?'on':'off'}" onclick="toggleAtt('${r._id}',this)" title="${r.attendance?'Mark absent':'Mark present'}"></button>
-      </td>
-      <td style="font-size:.72rem;color:var(--muted);white-space:nowrap">${fmtDate(r.createdAt)}</td>
-      <td>
-        <div style="display:flex;gap:5px">
-          <button class="action-btn edit" onclick="openDetail('${r._id}')">View</button>
-          <button class="action-btn edit" onclick="openEdit('${r._id}')">Edit</button>
-          <button class="action-btn del" onclick="confirmDelete('${r._id}','${esc(r.teamName)}')">Del</button>
-        </div>
-      </td>
-    </tr>`).join('');
-
-  // Pagination
-  document.getElementById('pageInfo').textContent = `Page ${d.page} of ${d.pages} · ${d.total} teams`;
-  renderPagination('pageBtns', d.page, d.pages, p => loadRegistrations(p));
-  updateBulkBar();
-}
-
-function applyFilters() {
-  regFilters.status   = document.getElementById('filterStatus').value;
-  regFilters.category = document.getElementById('filterCat').value;
-  loadRegistrations(1);
-}
-
-function handleGlobalSearch(val) {
-  regFilters.search = val;
-  clearTimeout(window._st);
-  window._st = setTimeout(() => {
-    if (document.getElementById('view-registrations').classList.contains('active')) loadRegistrations(1);
-    if (document.getElementById('view-attendance').classList.contains('active'))    loadAttendance(1, val);
-  }, 350);
-}
-
-/* ══════════════════════════════════════
-   ATTENDANCE
-══════════════════════════════════════ */
-async function loadAttendance(page = 1, search = '') {
-  currentAttPage = page;
-  search = search || document.getElementById('attSearch')?.value || '';
-  const params = new URLSearchParams({ page, limit: 30, search });
-  const d = await api('GET', `/api/admin/registrations?${params}`);
-  if (!d) return;
-
-  const present = d.data.filter(r => r.attendance).length;
-  const absent  = d.data.filter(r => !r.attendance).length;
-
-  // Get totals from full list for header counters
-  const all = await api('GET', `/api/admin/registrations?limit=1000`);
-  if (all) {
-    document.getElementById('attPresent').textContent = all.data.filter(r => r.attendance).length;
-    document.getElementById('attAbsent').textContent  = all.data.filter(r => !r.attendance).length;
-  }
-
-  const tbody = document.getElementById('attBody');
-  if (!d.data.length) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="no-data"><div class="nd-icon">📭</div>No teams found</div></td></tr>`;
-    document.getElementById('attPageInfo').textContent = 'No results';
-    document.getElementById('attPageBtns').innerHTML = '';
-    return;
-  }
-
-  tbody.innerHTML = d.data.map((r, i) => `
-    <tr>
-      <td style="color:var(--muted);font-size:.75rem">${(page-1)*30+i+1}</td>
-      <td><strong style="font-size:.85rem">${esc(r.teamName)}</strong></td>
-      <td><div style="font-size:.82rem">${esc(r.leader?.name||'')}</div><div style="font-size:.7rem;color:var(--muted)">${esc(r.leader?.email||'')}</div></td>
-      <td style="font-size:.8rem">${esc(r.leader?.college||'')}</td>
-      <td style="font-size:.78rem;color:var(--muted)">${r.memberCount} total</td>
-      <td style="font-size:.78rem;max-width:140px;overflow:hidden;text-overflow:ellipsis">${esc(r.project?.title||'')}</td>
-      <td style="font-size:.75rem;color:var(--muted)">${r.checkedInAt ? fmtDateTime(r.checkedInAt) : '—'}</td>
-      <td>
-        <button class="att-toggle ${r.attendance?'on':'off'}" onclick="toggleAtt('${r._id}',this,'att')"></button>
-      </td>
-    </tr>`).join('');
-
-  document.getElementById('attPageInfo').textContent = `Page ${d.page} of ${d.pages} · ${d.total} teams`;
-  renderPagination('attPageBtns', d.page, d.pages, p => loadAttendance(p));
-}
-
-async function toggleAtt(id, btn, context) {
-  const isOn = btn.classList.contains('on');
-  btn.classList.toggle('on', !isOn);
-  btn.classList.toggle('off', isOn);
-  const r = await api('PATCH', `/api/admin/registrations/${id}/attendance`, { attendance: !isOn });
-  if (r?.success) {
-    toast(!isOn ? '✅ Marked present' : '⬜ Marked absent', 'success');
-    if (context === 'att') loadAttendance(currentAttPage);
-    else loadDashboard();
-  } else {
-    btn.classList.toggle('on', isOn);
-    btn.classList.toggle('off', !isOn);
-    toast('Failed to update attendance', 'error');
+    const json = await res.json();
+    if (!res.ok) console.error('Registration API error:', json);
+    return json;
+  } catch (e) {
+    console.error('Backend error:', e);
   }
 }
 
-/* ══════════════════════════════════════
-   SELECTION
-══════════════════════════════════════ */
-function toggleSelect(id, cb) {
-  if (cb.checked) selectedIds.add(id); else selectedIds.delete(id);
-  updateBulkBar();
-}
-function toggleSelectAll(cb) {
-  regData.forEach(r => { if (cb.checked) selectedIds.add(r._id); else selectedIds.delete(r._id); });
-  document.querySelectorAll('#regBody .cb').forEach(c => c.checked = cb.checked);
-  updateBulkBar();
-}
-function clearSelection() {
-  selectedIds.clear();
-  document.querySelectorAll('#regBody .cb').forEach(c => c.checked = false);
-  document.getElementById('selectAll').checked = false;
-  updateBulkBar();
-}
-function updateBulkBar() {
-  const n = selectedIds.size;
-  const bar = document.getElementById('bulkActions');
-  bar.classList.toggle('show', n > 0);
-  document.getElementById('bulkCount').textContent = `${n} selected`;
-}
-async function bulkDelete() {
-  if (!selectedIds.size) return;
-  showConfirm(`Delete ${selectedIds.size} registrations?`, 'This cannot be undone.', async () => {
-    const r = await api('DELETE', '/api/admin/registrations', { ids: [...selectedIds] });
-    if (r?.success) { toast(`Deleted ${r.deleted} registrations`, 'success'); clearSelection(); loadRegistrations(currentPage); loadDashboard(); }
-    else toast('Delete failed', 'error');
-  });
-}
-async function bulkAttendance(val) {
-  for (const id of selectedIds) {
-    await api('PATCH', `/api/admin/registrations/${id}/attendance`, { attendance: val });
-  }
-  toast(`Marked ${selectedIds.size} teams as ${val?'present':'absent'}`, 'success');
-  clearSelection();
-  loadRegistrations(currentPage);
-}
-
-/* ══════════════════════════════════════
-   EDIT
-══════════════════════════════════════ */
-function openEdit(id) {
-  const reg = regData.find(r => r._id === id);
-  if (!reg) return;
-  editingId = id;
-  document.getElementById('editBody').innerHTML = buildEditForm(reg);
-  openModal('editModal');
-}
-
-function openEditFromDetail() {
-  closeModal('detailModal');
-  openEdit(editingId);
-}
-
-function buildEditForm(r) {
-  const statusOpts = ['confirmed','cancelled','waitlist'].map(s =>
-    `<option value="${s}" ${r.status===s?'selected':''}>${s}</option>`).join('');
-
-  return `
-    <div class="section-divider">Team & Leader</div>
-    <div class="form-row">
-      <div class="fg"><label>Team Name</label><input id="ef-teamName" value="${esc(r.teamName)}"/></div>
-      <div class="fg"><label>Status</label><select id="ef-status">${statusOpts}</select></div>
-    </div>
-    <div class="form-row">
-      <div class="fg"><label>Leader Name</label><input id="ef-lname" value="${esc(r.leader?.name||'')}"/></div>
-      <div class="fg"><label>Leader Email</label><input id="ef-lemail" value="${esc(r.leader?.email||'')}"/></div>
-    </div>
-    <div class="form-row">
-      <div class="fg"><label>Leader Phone</label><input id="ef-lphone" value="${esc(r.leader?.phone||'')}"/></div>
-      <div class="fg"><label>Leader College</label><input id="ef-lcollege" value="${esc(r.leader?.college||'')}"/></div>
-    </div>
-    <div class="form-row">
-      <div class="fg"><label>Department</label><input id="ef-ldept" value="${esc(r.leader?.dept||'')}"/></div>
-      <div class="fg"><label>Year</label><input id="ef-lyear" value="${esc(r.leader?.year||'')}"/></div>
-    </div>
-    <div class="section-divider">Project</div>
-    <div class="form-row">
-      <div class="fg"><label>Project Title</label><input id="ef-ptitle" value="${esc(r.project?.title||'')}"/></div>
-      <div class="fg"><label>Category</label><input id="ef-pcat" value="${esc(r.project?.category||'')}"/></div>
-    </div>
-    <div class="form-row full">
-      <div class="fg"><label>Problem Statement</label><textarea id="ef-pprob" rows="2">${esc(r.project?.problem||'')}</textarea></div>
-    </div>
-    <div class="section-divider">Admin Notes</div>
-    <div class="form-row full">
-      <div class="fg"><label>Notes</label><textarea id="ef-notes" rows="2" placeholder="Internal notes…">${esc(r.notes||'')}</textarea></div>
-    </div>`;
-}
-
-async function saveEdit() {
-  const reg = regData.find(r => r._id === editingId);
-  const update = {
-    teamName: document.getElementById('ef-teamName').value.trim(),
-    status:   document.getElementById('ef-status').value,
-    notes:    document.getElementById('ef-notes').value.trim(),
-    leader: {
-      ...reg.leader,
-      name:    document.getElementById('ef-lname').value.trim(),
-      email:   document.getElementById('ef-lemail').value.trim(),
-      phone:   document.getElementById('ef-lphone').value.trim(),
-      college: document.getElementById('ef-lcollege').value.trim(),
-      dept:    document.getElementById('ef-ldept').value.trim(),
-      year:    document.getElementById('ef-lyear').value.trim(),
-    },
-    project: {
-      ...reg.project,
-      title:    document.getElementById('ef-ptitle').value.trim(),
-      category: document.getElementById('ef-pcat').value.trim(),
-      problem:  document.getElementById('ef-pprob').value.trim(),
-    },
+/* ── RAZORPAY — dynamic loader ── */
+function loadRazorpay(cb){
+  if(window.Razorpay){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://checkout.razorpay.com/v1/checkout.js';
+  s.onload=cb;
+  s.onerror=()=>{
+    alert('Could not load Razorpay. Please check your internet connection and try again.');
+    const btn=document.getElementById('payBtn');
+    btn.disabled=false;
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Pay ₹300 & Register`;
   };
-  const r = await api('PUT', `/api/admin/registrations/${editingId}`, update);
-  if (r?.success) {
-    toast('Registration updated', 'success');
-    closeModal('editModal');
-    loadRegistrations(currentPage);
-  } else {
-    toast(r?.error || 'Update failed', 'error');
+  document.head.appendChild(s);
+}
+
+function openRazorpay(){
+  const btn=document.getElementById('payBtn');
+  const payIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`;
+
+  // Demo mode if key not set
+  if(!CFG.RAZORPAY_KEY || CFG.RAZORPAY_KEY==='rzp_test_YourKeyHere'){
+    const fakePid='pay_DEMO_'+Math.random().toString(36).substr(2,14).toUpperCase();
+    if(confirm(`⚠️ Demo Mode\n\nRazorpay key not configured yet.\n\nClick OK to simulate a successful ₹300 payment and test the Google Sheets integration.\n\nPayment ID (fake): ${fakePid}`)){
+      toSheets(collectData(fakePid)).then(()=>showSucc(fakePid));
+    } else {
+      btn.disabled=false;
+      btn.innerHTML=payIcon+' Pay ₹300 & Register';
+    }
+    return;
   }
-}
 
-/* ══════════════════════════════════════
-   DETAIL VIEW
-══════════════════════════════════════ */
-async function openDetail(id) {
-  editingId = id;
-  const r = await api('GET', `/api/admin/registrations/${id}`);
-  if (!r) return;
-  document.getElementById('detailTitle').textContent = r.teamName;
-  document.getElementById('detailBody').innerHTML = `
-    <div class="detail-section">
-      <h4>Team Leader</h4>
-      <div class="detail-grid">
-        <div class="detail-item"><div class="di-label">Name</div><div class="di-val">${esc(r.leader?.name||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Email</div><div class="di-val">${esc(r.leader?.email||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Phone</div><div class="di-val">${esc(r.leader?.phone||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">College</div><div class="di-val">${esc(r.leader?.college||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Department</div><div class="di-val">${esc(r.leader?.dept||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Year</div><div class="di-val">${esc(r.leader?.year||'—')}</div></div>
-      </div>
-    </div>
-    ${r.members?.length ? `
-    <div class="detail-section">
-      <h4>Team Members (${r.members.length})</h4>
-      ${r.members.map(m => `<span class="member-chip">👤 ${esc(m.name)} · ${esc(m.dept)}</span>`).join('')}
-    </div>` : ''}
-    <div class="detail-section">
-      <h4>Project</h4>
-      <div class="detail-grid">
-        <div class="detail-item"><div class="di-label">Title</div><div class="di-val">${esc(r.project?.title||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Category</div><div class="di-val">${esc(r.project?.category||'—')}</div></div>
-        <div class="detail-item" style="grid-column:1/-1"><div class="di-label">Problem Statement</div><div class="di-val" style="white-space:normal;line-height:1.5">${esc(r.project?.problem||'—')}</div></div>
-        <div class="detail-item" style="grid-column:1/-1"><div class="di-label">Description</div><div class="di-val" style="white-space:normal;line-height:1.5">${esc(r.project?.desc||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Power</div><div class="di-val">${esc(r.project?.power||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Special</div><div class="di-val">${esc(r.project?.special||'None')}</div></div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <h4>Payment & Status</h4>
-      <div class="detail-grid">
-        <div class="detail-item"><div class="di-label">Payment ID</div><div class="di-val" style="font-family:monospace;font-size:.78rem">${esc(r.payment?.id||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Amount</div><div class="di-val">${esc(r.payment?.amount||'—')}</div></div>
-        <div class="detail-item"><div class="di-label">Status</div><div class="di-val"><span class="status-badge ${r.status}">${r.status}</span></div></div>
-        <div class="detail-item"><div class="di-label">Attendance</div><div class="di-val"><span class="att-badge ${r.attendance?'present':'absent'}">${r.attendance?'✅ Present':'⬜ Absent'}</span></div></div>
-        <div class="detail-item"><div class="di-label">Registered</div><div class="di-val">${fmtDateTime(r.createdAt)}</div></div>
-        ${r.checkedInAt ? `<div class="detail-item"><div class="di-label">Checked In</div><div class="di-val">${fmtDateTime(r.checkedInAt)}</div></div>` : ''}
-      </div>
-    </div>
-    ${r.notes ? `<div class="detail-section"><h4>Notes</h4><p style="font-size:.83rem;color:var(--muted);line-height:1.6">${esc(r.notes)}</p></div>` : ''}`;
-  openModal('detailModal');
-}
+  const opts={
+    key:CFG.RAZORPAY_KEY,
+    amount:CFG.FEE,
+    currency:'INR',
+    name:'IEDC CEP — Advyka 2026',
+    description:`Prototype Challenge — ${g('tName')}`,
+    prefill:{name:g('lName'),email:g('lEmail'),contact:g('lPhone').replace(/\D/g,'')},
+    notes:{team:g('tName'),project:g('pTitle'),college:g('lCollege')},
+    theme:{color:'#f47920'},
+    handler:async function(r){
+      const data=collectData(r.razorpay_payment_id);
+      await toSheets(data);
+      showSucc(r.razorpay_payment_id);
+    },
+    modal:{
+      ondismiss:()=>{
+        btn.disabled=false;
+        btn.innerHTML=payIcon+' Pay ₹300 & Register';
+      }
+    }
+  };
 
-/* ══════════════════════════════════════
-   DELETE
-══════════════════════════════════════ */
-function confirmDelete(id, name) {
-  showConfirm(`Delete "${name}"?`, 'This registration will be permanently removed.', async () => {
-    const r = await api('DELETE', `/api/admin/registrations/${id}`);
-    if (r?.success) { toast('Registration deleted', 'success'); loadRegistrations(currentPage); loadDashboard(); }
-    else toast('Delete failed', 'error');
+  const rzp=new Razorpay(opts);
+  rzp.on('payment.failed',r=>{
+    alert(`Payment failed: ${r.error.description}`);
+    btn.disabled=false;
+    btn.innerHTML=payIcon+' Pay ₹300 & Register';
   });
+  rzp.open();
 }
 
-/* ══════════════════════════════════════
-   EXPORT CSV
-══════════════════════════════════════ */
-async function exportCSV() {
-  toast('Preparing CSV download…', 'info');
-  const url = `/api/admin/export/csv`;
-  const a = document.createElement('a');
-  a.href = url; a.setAttribute('download', '');
-  // Add auth token as query param for file download
-  a.href = url + `?token=${TOKEN}`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+function pay(){
+  const btn=document.getElementById('payBtn');
+  btn.disabled=true;
+  btn.textContent='Loading…';
+  loadRazorpay(openRazorpay);
 }
 
-/* ══════════════════════════════════════
-   SETTINGS
-══════════════════════════════════════ */
-async function changePassword() {
-  const cur  = document.getElementById('curPwd').value;
-  const nw   = document.getElementById('newPwd').value;
-  const conf = document.getElementById('confPwd').value;
-  if (!cur || !nw || !conf) { toast('Fill all fields', 'error'); return; }
-  if (nw !== conf) { toast('Passwords do not match', 'error'); return; }
-  if (nw.length < 6) { toast('Password too short', 'error'); return; }
-  const r = await api('PUT', '/api/admin/password', { currentPassword: cur, newPassword: nw });
-  if (r?.success) { toast('Password updated', 'success'); document.getElementById('curPwd').value = document.getElementById('newPwd').value = document.getElementById('confPwd').value = ''; }
-  else toast(r?.error || 'Failed', 'error');
+/* ── SUCCESS ── */
+function showSucc(pid){
+  document.querySelector('.fb2').style.display='none';
+  document.getElementById('sbar').style.display='none';
+  document.querySelector('.rh').style.display='none';
+  const s=document.getElementById('succ');
+  s.classList.add('show');
+  document.getElementById('cid').textContent=`Confirmation ID: ${pid}`;
+  s.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function shareR(){
+  if(navigator.share)navigator.share({title:'Registered for Prototype Challenge — Advyka 2026!',text:`Our team "${g('tName')}" is competing at IEDC CEP's Prototype Challenge 🚀`,url:window.location.href});
+  else{navigator.clipboard.writeText(window.location.href);alert('Link copied!');}
 }
 
-/* ══════════════════════════════════════
-   REFRESH
-══════════════════════════════════════ */
-function refreshAll() {
-  const active = document.querySelector('.view.active')?.id;
-  if (active === 'view-dashboard')     loadDashboard();
-  if (active === 'view-registrations') loadRegistrations(currentPage);
-  if (active === 'view-attendance')    loadAttendance(currentAttPage);
-  toast('Refreshed', 'info');
+/* ── CONTACT FORM ── */
+async function sendMsg(){
+  const n=document.getElementById('cfN').value.trim();
+  const e=document.getElementById('cfE').value.trim();
+  const m=document.getElementById('cfM').value.trim();
+  if(!n||!e||!m){alert('Please fill in all fields.');return;}
+  // Contact messages just log to console — add a /api/contact route if needed
+  console.log('Contact:', {name:n, email:e, subject:document.getElementById('cfS').value, message:m});
+  document.getElementById('cf').style.display='none';
+  document.getElementById('cfsuc').classList.add('show');
 }
-
-/* ══════════════════════════════════════
-   MODAL HELPERS
-══════════════════════════════════════ */
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
-});
-
-let confirmCallback = null;
-function showConfirm(title, sub, cb) {
-  document.getElementById('confirmTitle').textContent = title;
-  document.getElementById('confirmSub').textContent = sub;
-  confirmCallback = cb;
-  openModal('confirmModal');
-}
-document.getElementById('confirmBtn').addEventListener('click', () => {
-  closeModal('confirmModal'); if (confirmCallback) confirmCallback();
-});
-
-/* ══════════════════════════════════════
-   PAGINATION
-══════════════════════════════════════ */
-function renderPagination(containerId, page, pages, cb) {
-  const el = document.getElementById(containerId);
-  if (pages <= 1) { el.innerHTML = ''; return; }
-  let btns = '';
-  btns += `<button class="page-btn" onclick="(${cb})(${page-1})" ${page<=1?'disabled':''}>←</button>`;
-  const range = [];
-  for (let i = Math.max(1,page-2); i <= Math.min(pages,page+2); i++) range.push(i);
-  if (range[0] > 1) btns += `<button class="page-btn" onclick="(${cb})(1)">1</button>${range[0]>2?'<span style="color:var(--muted);padding:5px 4px">…</span>':''}`;
-  range.forEach(p => btns += `<button class="page-btn ${p===page?'active':''}" onclick="(${cb})(${p})">${p}</button>`);
-  if (range[range.length-1] < pages) btns += `${range[range.length-1]<pages-1?'<span style="color:var(--muted);padding:5px 4px">…</span>':''}<button class="page-btn" onclick="(${cb})(${pages})">${pages}</button>`;
-  btns += `<button class="page-btn" onclick="(${cb})(${page+1})" ${page>=pages?'disabled':''}>→</button>`;
-  el.innerHTML = btns;
-}
-
-/* ══════════════════════════════════════
-   TOAST
-══════════════════════════════════════ */
-function toast(msg, type='info') {
-  const el = document.createElement('div');
-  el.className = `toast-item ${type}`;
-  el.textContent = msg;
-  document.getElementById('toast').appendChild(el);
-  setTimeout(() => el.remove(), 3000);
-}
-
-/* ══════════════════════════════════════
-   UTILS
-══════════════════════════════════════ */
-function esc(str) { return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : '—'; }
-function fmtDateTime(d) { return d ? new Date(d).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—'; }
-function timeAgo(d) {
-  const s = Math.floor((Date.now()-new Date(d))/1000);
-  if(s<60)return `${s}s ago`;if(s<3600)return `${Math.floor(s/60)}m ago`;
-  if(s<86400)return `${Math.floor(s/3600)}h ago`;return `${Math.floor(s/86400)}d ago`;
-}
-
-// Fix export CSV — send token in header via fetch + blob
-async function exportCSV() {
-  toast('Preparing download…','info');
-  const r = await fetch('/api/admin/export/csv', { headers:{'Authorization':`Bearer ${TOKEN}`} });
-  if (!r.ok) { toast('Export failed','error'); return; }
-  const blob = await r.blob();
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = `advyka2026_${Date.now()}.csv`;
-  document.body.appendChild(a); a.click();
-  URL.revokeObjectURL(url); document.body.removeChild(a);
-  toast('CSV downloaded','success');
-}
-
-// Init
-checkAuth();
 </script>
 </body>
 </html>
