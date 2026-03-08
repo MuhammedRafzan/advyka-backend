@@ -25,12 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 /* ══════════════════════════════════════
    DB CONNECTION
 ══════════════════════════════════════ */
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/advyka2026')
-  .then(async () => {
-    console.log('✅ MongoDB connected');
-    await seedAdmin();
-  })
-  .catch(err => console.error('❌ MongoDB error:', err));
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log("✅ MongoDB connected"))
+.catch(err => console.error("❌ MongoDB error:", err));
 
 /* ══════════════════════════════════════
    SEED ADMIN ON FIRST RUN
