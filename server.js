@@ -29,7 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("✅ MongoDB connected");
-  await seedAdmin();   // create admin if it doesn't exist
+
+  await seedAdmin();   // ← THIS LINE IS THE FIX
+
 })
 .catch(err => console.error("❌ MongoDB error:", err));
 /* ══════════════════════════════════════
